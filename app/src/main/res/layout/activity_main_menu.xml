@@ -16,7 +16,8 @@
         android:ems="10"
         android:id="@+id/password_input"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:hint="@string/password_hint"/>
 
     <TextView
         android:text="@string/password_label"

@@ -1,5 +1,6 @@
 package com.niallod.quickbudget;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -15,6 +17,8 @@ public class MainMenu extends AppCompatActivity {
     private TextView errorMessage;
     private Button clearButton;
     private Button loginButton;
+
+    private String passwordEntered;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,30 +30,13 @@ public class MainMenu extends AppCompatActivity {
         setClearButton((Button) findViewById(R.id.clear_button));
         setLoginButton((Button) findViewById(R.id.login_button));
 
-        getPassword().addTextChangedListener(
-                new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable editable) {
-
-                    }
-                }
-        );
-
         getClearButton().setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         getPassword().setText("");
+
+                        Toast.makeText(MainMenu.this, "Text has been cleared", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -58,7 +45,14 @@ public class MainMenu extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //TODO query the database and authenticate the password
+                        passwordEntered = getPassword().getText().toString();
+                        Toast.makeText(MainMenu.this, passwordEntered, Toast.LENGTH_SHORT).show();
+                        //TODO Need to make a call to the database to verify the password
+
+                        //-------------------------------------------------------------
+                        Intent intent = new Intent(MainMenu.this, QuickBudget.class);
+                        startActivity(intent);
+                        //--------------------------------------------------------------
                     }
                 }
         );

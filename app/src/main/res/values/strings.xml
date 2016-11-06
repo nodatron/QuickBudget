@@ -3,6 +3,7 @@
     <string name="password_label">Password</string>
     <string name="clear_button_label">Clear</string>
     <string name="login_button_label">Login</string>
+    <string name="password_hint">Default is Blank</string>
 
 
     <!--  Error Messages  -->
