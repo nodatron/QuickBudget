@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.niallod.quickbudget.database.DatabaseManager;
+
 public class MainMenu extends AppCompatActivity {
 
     private EditText password;
@@ -47,7 +49,14 @@ public class MainMenu extends AppCompatActivity {
                     public void onClick(View view) {
                         passwordEntered = getPassword().getText().toString();
                         Toast.makeText(MainMenu.this, passwordEntered, Toast.LENGTH_SHORT).show();
-                        //TODO Need to make a call to the database to verify the password
+
+                        DatabaseManager dbManager = new DatabaseManager(MainMenu.this);
+                        dbManager.openDatabase();
+//                        if(!dbManager.loginUserByUsernamePassword("Niall", passwordEntered)) {
+//                            getErrorMessage().setText(getString(R.string.login_error_incorrect));
+//                        }
+                        dbManager.loginUserByUsernamePassword("Niall", passwordEntered);
+                        dbManager.closeDatabase();
 
                         //-------------------------------------------------------------
                         Intent intent = new Intent(MainMenu.this, QuickBudget.class);
