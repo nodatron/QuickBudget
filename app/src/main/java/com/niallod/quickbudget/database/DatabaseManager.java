@@ -1,10 +1,12 @@
 package com.niallod.quickbudget.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import com.niallod.quickbudget.constants.DatabaseConstants;
 
@@ -54,6 +56,23 @@ public class DatabaseManager {
 //        return enteredPassword.equals(password);
         return true;
     }
+
+    //                      Start of insert queries                             //
+    public boolean registerUser(final String username,
+                                final String password) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseConstants.Keys.USERNAME, username);
+        contentValues.put(DatabaseConstants.Keys.PASSWORD, password);
+        long i = database.insert(DatabaseConstants.Tables.USER, null, contentValues);
+        Toast.makeText(context, "Datbase Insertion returns = " + i, Toast.LENGTH_SHORT).show();
+        if(i == -1) {
+            return false;
+        }
+
+        return true;
+    }
+    //                      End of insert Queries                               //
+
     //                      Select Queries for Database                         //
     private Cursor getUserByUsername(final String username) {
         return  database.query(true,
