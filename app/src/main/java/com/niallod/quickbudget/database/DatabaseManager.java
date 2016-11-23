@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
+import com.niallod.quickbudget.business.Item;
 import com.niallod.quickbudget.constants.DatabaseConstants;
 
 /**
@@ -15,25 +16,6 @@ import com.niallod.quickbudget.constants.DatabaseConstants;
  */
 
 public class DatabaseManager {
-
-    //                      Start of Inner Class                                //
-    private static class DatabaseCreator extends SQLiteOpenHelper {
-
-        public DatabaseCreator(Context context) {
-            super(context, DatabaseConstants.DATABASE_NAME, null, DatabaseConstants.DATABASE_VERSION);
-        }
-
-        @Override
-        public void onCreate(SQLiteDatabase sqLiteDatabase) {
-            sqLiteDatabase.execSQL(DatabaseConstants.DATABASE_CREATE_STATEMENT);
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
-        }
-    }
-    //                      End of inner class                                  //
 
     private final Context context;
     private DatabaseCreator databaseCreator;
@@ -45,45 +27,64 @@ public class DatabaseManager {
     }
 
 
-
-    public boolean loginUserByUsernamePassword(final String enteredUsername,
-                                               final String enteredPassword) {
-
-        Cursor cursor = getUserByUsername(enteredUsername);
-        //TODO
-//        final String password = cursor.getString(1);
-//
-//        return enteredPassword.equals(password);
-        return true;
-    }
-
     //                      Start of insert queries                             //
-    public boolean registerUser(final String username,
-                                final String password) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseConstants.Keys.USERNAME, username);
-        contentValues.put(DatabaseConstants.Keys.PASSWORD, password);
-        long i = database.insert(DatabaseConstants.Tables.USER, null, contentValues);
-        Toast.makeText(context, "Datbase Insertion returns = " + i, Toast.LENGTH_SHORT).show();
-        if(i == -1) {
-            return false;
+    public boolean addNewIncomeItem(Item item) {
+
+        if(!doesBudgetAlreadyExist(item.getMonth(), item.getYear())) {
+            ContentValues newBudgetValues = new ContentValues();
+
+            newBudgetValues.put(DatabaseConstants.Keys.BUDGET_ITEM_MONTH, item.getMonth());
+            newBudgetValues.put(DatabaseConstants.Keys.BUDGET_ITEM_YEAR, item.getYear());
+
+            if(database.insert(DatabaseConstants.Tables.BUDGET, null, newBudgetValues) == -1L) {
+                return false;
+            }
         }
 
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_NAME, item.getName());
+        contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_TYPE, item.getType());
+        contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_VALUE, item.getValue());
+        contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_LOCATION, item.getLocation());
+        contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_MONTH, item.getMonth());
+        contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_YEAR, item.getYear());
+        if (item.isExpenditure()) {
+            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_EXP, true);
+            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_INCOME, false);
+        } else {
+            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_INCOME, true);
+            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_EXP, false);
+        }
+
+        if(item.isRepeatable()) {
+            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_REPEAT, true);
+        } else {
+            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_REPEAT, false);
+        }
+
+        if(database.insert(DatabaseConstants.Tables.BUDGET_ITEMS, null, contentValues) == -1L) {
+            return false;
+        }
         return true;
     }
     //                      End of insert Queries                               //
 
     //                      Select Queries for Database                         //
-    private Cursor getUserByUsername(final String username) {
-        return  database.query(true,
-                    DatabaseConstants.Tables.USER,
-                    new String[] {
-                        DatabaseConstants.Keys.USERNAME,
-                        DatabaseConstants.Keys.PASSWORD
-                    },
-                    DatabaseConstants.Keys.USERNAME + " = '" + username + "'",
-                    null, null, null, null, null
-                );
+    private boolean doesBudgetAlreadyExist(int month, int year) {
+
+        Cursor cursor = database.query(true, DatabaseConstants.Tables.BUDGET, new String[] {
+                DatabaseConstants.Keys.BUDGET_ITEM_MONTH, DatabaseConstants.Keys.BUDGET_ITEM_YEAR
+                },
+                DatabaseConstants.Keys.BUDGET_ITEM_MONTH + " = " + month + " and " +
+                DatabaseConstants.Keys.BUDGET_ITEM_YEAR + " = " + year,
+                null,null,null,null,null);
+
+        if(!(cursor.moveToFirst()) || cursor.getCount() == 0) {
+            cursor.close();
+            return false;
+        }
+
+        return true;
     }
     //                      End of select queries                               //
 

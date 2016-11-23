@@ -11,54 +11,15 @@
     android:orientation="vertical"
     tools:context="com.niallod.quickbudget.MainActivity">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:text="Hello"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/income_label_main_menu"
-            android:layout_weight="0.5" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/income_total_main_menu"
-            android:layout_weight="0.5" />
-    </LinearLayout>
-
     <ExpandableListView
         android:id="@+id/main_screen_exp_list_view_income"
         android:layout_width="match_parent"
-        android:layout_height="175dp">
-    </ExpandableListView>
+        android:layout_height="175dp"/>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:text="Hello"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/exp_label_main_menu"
-            android:layout_weight="0.5" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/exp_total_main_menu"
-            android:layout_weight="0.5" />
-    </LinearLayout>
     <ExpandableListView
         android:id="@+id/main_screen_exp_list_view_exp"
         android:layout_width="match_parent"
-        android:layout_height="175dp">
-    </ExpandableListView>
+        android:layout_height="175dp"/>
 
     <LinearLayout
         android:orientation="horizontal"
