@@ -10,9 +10,9 @@ import com.niallod.quickbudget.constants.DatabaseConstants;
  * Created by nodat on 22/11/2016.
  */
 
-public class DatabaseCreator extends SQLiteOpenHelper {
+class DatabaseCreator extends SQLiteOpenHelper {
 
-    public DatabaseCreator(Context context) {
+    DatabaseCreator(Context context) {
         super(context, DatabaseConstants.DATABASE_NAME, null, DatabaseConstants.DATABASE_VERSION);
     }
 

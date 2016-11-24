@@ -10,9 +10,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.niallod.quickbudget.R;
+import com.niallod.quickbudget.business.Item;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by nodat on 21/11/2016.
@@ -20,42 +22,41 @@ import java.util.List;
 
 public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 
-    private List<String> parent_title;
-    private HashMap<String, List<String>> child_parent_link;
+    private String parentTitle;
+    private HashMap<String, List<Item>> childItems;
     private Context context;
 
     public MyExpandableListAdapter(Context context,
-                                   List<String> parent_title,
-                                   HashMap<String, List<String>> child_parent_link) {
+                                   String parentTitle,
+                                   HashMap<String, List<Item>> childItems) {
         this.context = context;
-        this.parent_title = parent_title;
-        this.child_parent_link = child_parent_link;
+        this.parentTitle = parentTitle;
+        this.childItems = childItems;
     }
-
 
     @Override
     public int getGroupCount() {
-        return parent_title.size();
+        return 1;
     }
 
     @Override
     public int getChildrenCount(int i) {
-        return child_parent_link.get(parent_title.get(i)).size();
+        return childItems.get(parentTitle).size();
     }
 
     @Override
     public Object getGroup(int i) {
-        return parent_title.get(i);
+        return parentTitle;
     }
 
     @Override
     public Object getChild(int i, int i1) {
-        return child_parent_link.get(parent_title.get(i)).get(i1);
+        return childItems.get(parentTitle).get(i1);
     }
 
     @Override
     public long getGroupId(int i) {
-        return i;
+        return 0;
     }
 
     @Override
@@ -81,21 +82,18 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
             LayoutInflater layoutInflater =
                     (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = layoutInflater.inflate(R.layout.parent_layout, null);
+
+
+            TextView parent_label = (TextView) view.findViewById(R.id.parent_label);
+            TextView parent_value = (TextView) view.findViewById(R.id.parent_value);
+
+            parent_label.setTypeface(null, Typeface.BOLD);
+            parent_label.setText(title);
+
+            double value = calculateTotalOfValues();
+            String value_string = String.format(Locale.UK, "%6.2f", value);
+            parent_value.setText(value_string);
         }
-
-        TextView parent_label = (TextView) view.findViewById(R.id.parent_label);
-        TextView parent_value = (TextView) view.findViewById(R.id.parent_value);
-//        ImageButton expand_button = (ImageButton) view.findViewById(R.id.parent_expand_button);
-
-        parent_label.setTypeface(null, Typeface.BOLD);
-        parent_label.setText(title);
-
-        parent_value.setTypeface(null, Typeface.BOLD);
-        parent_value.setText(title);
-
-//        Double value = calculateTotalOfValues(title);
-//        String value_string = value.toString();
-//        parent_value.setText(value_string);
 
         //TODO get the image and place it here
 
@@ -104,28 +102,44 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
-        String title = (String) this.getChild(i, i1);
+        Item item = (Item) getChild(i, i1);
+        String title = item.getName();
+        float value = item.getValue();
 
         if(view == null) {
             LayoutInflater layoutInflater =
                     (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = layoutInflater.inflate(R.layout.child_layout, null);
-        }
 
-        TextView child_label = (TextView) view.findViewById(R.id.item_name_child);
-        TextView child_value = (TextView) view.findViewById(R.id.item_value_child);
+
+            TextView child_label = (TextView) view.findViewById(R.id.item_name_child);
+            TextView child_value = (TextView) view.findViewById(R.id.item_value_child);
 //        ImageButton child_button = (ImageButton) view.findViewById(R.id.item_edit_button);
 
-        child_label.setText(title);
+            child_label.setText(title);
+            String valueString = String.format(Locale.UK, "%6.2f", value);
+            child_value.setText(valueString);
 
 //        ArrayList<Double> child_values = (ArrayList<Double>) values.get(child_parent_link.get(title));
 //        Double theValue = child_values.get(i1);
 //        String theValueString = theValue.toString();
 //        child_value.setText(theValueString);
 
-        //TODO get the image and place it here
+            //TODO get the image and place it here
+        }
 
 
         return view;
+    }
+
+    private double calculateTotalOfValues() {
+        double value = 0.0;
+        List<Item> items = childItems.get(parentTitle);
+
+        for(Item i : items) {
+            value +=  (double) i.getValue();
+        }
+
+        return value;
     }
 }

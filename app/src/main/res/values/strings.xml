@@ -11,6 +11,10 @@
     <string name="name_label">Full Name</string>
     <string name="username_label">Username</string>
 
+    <string name="parent_title_income">Income</string>
+    <string name="parent_title_exp">Expenditure</string>
+    <string name="parent_title_balance">Balance</string>
+
 
     <!--  Error Messages  -->
     <string name="login_error_incorrect">Password is incorrect</string>

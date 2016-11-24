@@ -9,7 +9,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
 import com.niallod.quickbudget.business.Item;
+import com.niallod.quickbudget.business.ItemMaker;
 import com.niallod.quickbudget.constants.DatabaseConstants;
+
+import java.util.List;
 
 /**
  * Created by nodat on 08/11/2016.
@@ -28,7 +31,7 @@ public class DatabaseManager {
 
 
     //                      Start of insert queries                             //
-    public boolean addNewIncomeItem(Item item) {
+    public boolean addNewItem(Item item) {
 
         if(!doesBudgetAlreadyExist(item.getMonth(), item.getYear())) {
             ContentValues newBudgetValues = new ContentValues();
@@ -49,17 +52,17 @@ public class DatabaseManager {
         contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_MONTH, item.getMonth());
         contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_YEAR, item.getYear());
         if (item.isExpenditure()) {
-            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_EXP, true);
-            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_INCOME, false);
+            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_EXP, "true");
+            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_INCOME, "false");
         } else {
-            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_INCOME, true);
-            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_EXP, false);
+            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_INCOME, "true");
+            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_EXP, "false");
         }
 
         if(item.isRepeatable()) {
-            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_REPEAT, true);
+            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_REPEAT, "true");
         } else {
-            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_REPEAT, false);
+            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_REPEAT, "false");
         }
 
         if(database.insert(DatabaseConstants.Tables.BUDGET_ITEMS, null, contentValues) == -1L) {
@@ -85,6 +88,32 @@ public class DatabaseManager {
         }
 
         return true;
+    }
+
+    public List<Item> getAllItemsForMonth(int month, int year, boolean income) {
+        String type = DatabaseConstants.Keys.BUDGET_ITEM_EXP;
+        if (income) {
+            type = DatabaseConstants.Keys.BUDGET_ITEM_INCOME;
+        }
+        Cursor cursor = database.query(DatabaseConstants.Tables.BUDGET_ITEMS,
+                new String[] {
+                        DatabaseConstants.Keys.BUDGET_ITEM_NAME,
+                        DatabaseConstants.Keys.BUDGET_ITEM_TYPE,
+                        DatabaseConstants.Keys.BUDGET_ITEM_VALUE,
+                        DatabaseConstants.Keys.BUDGET_ITEM_LOCATION,
+                        DatabaseConstants.Keys.BUDGET_ITEM_MONTH,
+                        DatabaseConstants.Keys.BUDGET_ITEM_YEAR,
+                        DatabaseConstants.Keys.BUDGET_ITEM_INCOME,
+                        DatabaseConstants.Keys.BUDGET_ITEM_EXP,
+                        DatabaseConstants.Keys.BUDGET_ITEM_REPEAT
+                },
+                DatabaseConstants.Keys.BUDGET_ITEM_MONTH + " = " + month + " and "
+                + DatabaseConstants.Keys.BUDGET_ITEM_YEAR + " = " + year + " and "
+                + type + " = " + "'true'",
+                null,null,null,null,null);
+
+        ItemMaker itemMaker = new ItemMaker();
+        return itemMaker.convertCursorToList(cursor);
     }
     //                      End of select queries                               //
 
