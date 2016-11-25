@@ -16,6 +16,23 @@ public class ItemMaker {
     public ItemMaker() {
     }
 
+    public Item makeItem(String name, double value, String type,
+                         int month, int year, boolean isIncome,
+                         boolean isExpense, boolean isRepeat, String location) {
+        Item item = new Item();
+        item.setName(name);
+        item.setValue((float) value);
+        item.setType(findTypeIntValue(type));
+        item.setMonth(month);
+        item.setYear(year);
+        item.setLocation(location);
+        item.setIncome(isIncome);
+        item.setExpenditure(isExpense);
+        item.setRepeatable(isRepeat);
+
+        return item;
+    }
+
     public List<Item> convertCursorToList(Cursor cursor) {
         List<Item> items = new ArrayList<>();
 
@@ -49,5 +66,9 @@ public class ItemMaker {
         }
 
         return items;
+    }
+
+    private int findTypeIntValue(String type) {
+        return 1;
     }
 }

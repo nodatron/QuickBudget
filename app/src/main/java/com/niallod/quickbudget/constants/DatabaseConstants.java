@@ -6,7 +6,7 @@ package com.niallod.quickbudget.constants;
 
 public class DatabaseConstants {
 
-    public static final String DATABASE_NAME = "QuickBudget";
+    public static final String DATABASE_NAME = "QuickBudgetV2";
     public static final String DATABASE_CREATE_STATEMENT_BUDGET =
             "Create table budget(month integer, year integer, primary key(month, year));";
     public static final String DATABASE_CREATE_STATEMENT_ITEMS =
