@@ -130,6 +130,7 @@
         android:layout_below="@+id/add_item_manual_location"
         android:layout_alignParentStart="true"
         android:id="@+id/add_item_auto_location"
+        android:visibility="gone"
         android:textSize="18sp"
         android:textAlignment="center" />
 
@@ -156,7 +157,8 @@
         android:hint="Location Name"
         android:ems="10"
         android:id="@+id/add_item_manual_location_input"
-        android:layout_below="@+id/add_item_manual_location"
+        android:layout_below="@+id/add_item_auto_location"
+        android:visibility="visible"
         android:layout_alignParentStart="true" />
 
 

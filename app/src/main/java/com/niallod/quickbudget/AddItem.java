@@ -2,6 +2,7 @@ package com.niallod.quickbudget;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -39,9 +40,9 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener, 
     private ImageButton clearButton;
     private ImageButton submitButton;
 
-    private String typeOfItem;
-    private int month;
-    private int year;
+    private String typeOfItem = "";
+    private int month = 0;
+    private int year = 0;
     private boolean isIncome = true;
     private boolean isExpense = false;
     private boolean isRepeat = false;
@@ -49,6 +50,13 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener, 
 
     private ArrayAdapter<String> incomeTypeAdapter;
     private ArrayAdapter<String> expTypeAdapter;
+    private ArrayAdapter<String> monthsAdapter;
+    private ArrayAdapter<String> yearsAdapter;
+
+    private String[] incomeTypes;
+    private String[] expTypes;
+    private String[] months;
+    private String[] years;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,24 +86,19 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener, 
         repeatInput.setOnClickListener(this);
         useLocationInput.setOnClickListener(this);
 
-        String[] incomeTypes = getResources().getStringArray(R.array.income_types);
+        incomeTypes = getResources().getStringArray(R.array.income_types);
         incomeTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, incomeTypes);
         incomeTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        String[] expTypes = getResources().getStringArray(R.array.expenditure_types);
+        expTypes = getResources().getStringArray(R.array.expenditure_types);
         expTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, expTypes);
         expTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        String[] months = getResources().getStringArray(R.array.months);
-        ArrayAdapter<String> monthsAdapter =
-                new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, months);
+        months = getResources().getStringArray(R.array.months);
+        monthsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, months);
         monthsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        String[] years = getResources().getStringArray(R.array.years);
-        ArrayAdapter<String> yearsAdapter =
-                new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, years);
+        years = getResources().getStringArray(R.array.years);
+        yearsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, years);
         yearsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        itemType.setOnItemSelectedListener(this);
-        monthInput.setOnItemSelectedListener(this);
-        yearInput.setOnItemSelectedListener(this);
         submitButton.setOnClickListener(this);
         clearButton.setOnClickListener(this);
 
@@ -145,10 +148,12 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener, 
 
             case R.id.add_item_repeat: {
                 isRepeat = !isRepeat;
+                repeatInput.setChecked(isRepeat);
             } break;
 
             case R.id.add_item_auto_location: {
                 autoLocation = !autoLocation;
+
             } break;
 
             case R.id.add_item_cancel: {
@@ -160,17 +165,17 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener, 
                     Toast.makeText(this, "New Item Successfully added", Toast.LENGTH_SHORT).show();
                     clearAllInputs();
                 } else {
-                    Toast.makeText(this, "New Item Successfully added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Item not added", Toast.LENGTH_SHORT).show();
                 }
             } break;
 
-            case R.id.add_item_manual_location_input: {
+            case R.id.add_item_manual_location: {
                 if(useUserInputtedLocation.isChecked()) {
-                    useLocationInput.setVisibility(View.INVISIBLE);
+                    useLocationInput.setVisibility(View.GONE);
                     userInputtedLocation.setVisibility(View.VISIBLE);
                 } else {
                     useLocationInput.setVisibility(View.VISIBLE);
-                    userInputtedLocation.setVisibility(View.INVISIBLE);
+                    userInputtedLocation.setVisibility(View.GONE);
                 }
             } break;
         }
@@ -182,11 +187,15 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener, 
 
         switch (view.getId()) {
             case R.id.add_item_type_input_spinner: {
-                typeOfItem = (String) itemType.getItemAtPosition(i);
+                if(isIncome)
+                    typeOfItem = incomeTypes[i];
+                else
+                    typeOfItem = expTypes[i];
             } break;
 
             case R.id.add_item_month_input_spinner: {
-                String monthStr = (String) adapterView.getItemAtPosition(i);
+                String monthStr = months[i];
+                Log.d("month spinner", "Data given back " + monthStr);
                 switch (monthStr) {
                     case "January": { month = 1; } break;
                     case "February": { month = 2; } break;
@@ -205,21 +214,35 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener, 
             } break;
 
             case R.id.add_item_year_input_spinner: {
-                year = Integer.parseInt((String) yearInput.getItemAtPosition(i));
+                year = Integer.parseInt(years[i]);
             } break;
         }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-        typeOfItem = "";
-
-        month = 0;
-
-        year = 0;
     }
 
     private boolean updateDatabaseWithNewItem() {
+        String monthStr = (String) monthInput.getSelectedItem();
+        switch (monthStr) {
+            case "January": { month = 1; } break;
+            case "February": { month = 2; } break;
+            case "March": { month = 3; } break;
+            case "April": { month = 4; } break;
+            case "May": { month = 5; } break;
+            case "June": { month = 6; } break;
+            case "July": { month = 7; } break;
+            case "August": { month = 8; } break;
+            case "September": { month = 9; } break;
+            case "October": { month = 10; } break;
+            case "November": { month = 11; } break;
+            case "December": { month = 12; } break;
+            default: { month = 0; } break;
+        }
+
+        year = Integer.parseInt((String) yearInput.getSelectedItem());
+        typeOfItem = (String) itemType.getSelectedItem();
 
         if(inputValid()) {
             ItemMaker itemMaker = new ItemMaker();

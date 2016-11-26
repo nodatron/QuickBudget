@@ -37,6 +37,65 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        init();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        init();
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.overview_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemID = item.getItemId();
+        Intent i = null;
+        switch (itemID) {
+            case R.id.action_add_item: {
+                i = new Intent(this, AddItem.class);
+            } break;
+
+            case R.id.action_edit_item: {
+                i = new Intent(this, EditItem.class);
+            } break;
+
+            case R.id.action_remove_item: {
+                i = new Intent(this, RemoveItem.class);
+            } break;
+
+            case R.id.action_settings: {
+                i = new Intent(this, SettingsActivity.class);
+            } break;
+
+            default: {
+
+            } break;
+        }
+        startActivity(i);
+        return true;
+    }
+
+    private double calculateBalanceValue(List<Item> incomeItems, List<Item> expItems) {
+        double balance = 0.0;
+        for(Item i : incomeItems) {
+            balance += i.getValue();
+        }
+        for(Item i : expItems) {
+            balance -= i.getValue();
+        }
+        return balance;
+    }
+
+    private void init() {
         incomeExpandableListView = (ExpandableListView) findViewById(R.id.main_screen_exp_list_view_income);
         expExpandableListView = (ExpandableListView) findViewById(R.id.main_screen_exp_list_view_exp);
         balanceLabel = (TextView) findViewById(R.id.balance_label_main_menu);
@@ -114,54 +173,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.overview_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemID = item.getItemId();
-        Intent i = null;
-        switch (itemID) {
-            case R.id.action_add_item: {
-                i = new Intent(this, AddItem.class);
-            } break;
-
-            case R.id.action_edit_item: {
-                i = new Intent(this, EditItem.class);
-            } break;
-
-            case R.id.action_remove_item: {
-                i = new Intent(this, RemoveItem.class);
-            } break;
-
-            case R.id.action_settings: {
-                i = new Intent(this, SettingsActivity.class);
-            } break;
-
-            default: {
-
-            } break;
-        }
-        startActivity(i);
-        return true;
-    }
-
-    private double calculateBalanceValue(List<Item> incomeItems, List<Item> expItems) {
-        double balance = 0.0;
-        for(Item i : incomeItems) {
-            balance += i.getValue();
-        }
-        for(Item i : expItems) {
-            balance -= i.getValue();
-        }
-        return balance;
     }
 
 }
