@@ -90,6 +90,19 @@ public class DatabaseManager {
         return true;
     }
 
+    private boolean doesItemExist(int id) {
+
+        Cursor cursor = database.query(true, DatabaseConstants.Tables.BUDGET_ITEMS,
+                new String[] {DatabaseConstants.Keys.BUDGET_ID},
+                DatabaseConstants.Keys.BUDGET_ID + " = " + id,
+                null, null, null, null, null);
+        if(!(cursor.moveToFirst()) || cursor.getCount() == 0) {
+            return false;
+        }
+
+        return true;
+    }
+
     public List<Item> getAllItemsForMonth(int month, int year, boolean income) {
         String type = DatabaseConstants.Keys.BUDGET_ITEM_EXP;
         if (income) {
@@ -97,6 +110,7 @@ public class DatabaseManager {
         }
         Cursor cursor = database.query(DatabaseConstants.Tables.BUDGET_ITEMS,
                 new String[] {
+                        DatabaseConstants.Keys.BUDGET_ID,
                         DatabaseConstants.Keys.BUDGET_ITEM_NAME,
                         DatabaseConstants.Keys.BUDGET_ITEM_TYPE,
                         DatabaseConstants.Keys.BUDGET_ITEM_VALUE,
@@ -117,6 +131,59 @@ public class DatabaseManager {
     }
     //                      End of select queries                               //
 
+
+    //                      Database Update Methods                             //
+    //TODO Make this better by only updating the required fields
+    public boolean updateExistingItem(Item item) {
+
+        if(!(doesItemExist(item.getId()))) {
+            return false;
+        }
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_NAME, item.getName());
+        contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_TYPE, item.getType());
+        contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_VALUE, item.getValue());
+        contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_LOCATION, item.getLocation());
+        contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_MONTH, item.getMonth());
+        contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_YEAR, item.getYear());
+        if (item.isExpenditure()) {
+            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_EXP, "true");
+            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_INCOME, "false");
+        } else {
+            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_INCOME, "true");
+            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_EXP, "false");
+        }
+
+        if(item.isRepeatable()) {
+            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_REPEAT, "true");
+        } else {
+            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_REPEAT, "false");
+        }
+
+        if(database.update(DatabaseConstants.Tables.BUDGET_ITEMS,
+                           contentValues,
+                           DatabaseConstants.Keys.BUDGET_ID + " = " + item.getId(),
+                           null) == 1) {
+            return true;
+        }
+        return false;
+    }
+    //                      End of Update Methods                               //
+
+    //                      Database Delete Methods                             //
+    public boolean deleteItemByID(int id) {
+        if(doesItemExist(id)) {
+            if(database.delete(DatabaseConstants.Tables.BUDGET_ITEMS,
+                    DatabaseConstants.Keys.BUDGET_ID + " = " + id,
+                    null) == 1) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    //                      End of Delete Methods                               //
 
     //                      Database Control Methods                            //
     public DatabaseManager openDatabase()

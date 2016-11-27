@@ -30,13 +30,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/balance_label_main_menu"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.5"
+            android:textSize="24sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/balance_total_main_menu"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.5"
+            android:textSize="24sp" />
     </LinearLayout>
 
 </LinearLayout>

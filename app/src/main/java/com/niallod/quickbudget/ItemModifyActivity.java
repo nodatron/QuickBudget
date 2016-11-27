@@ -3,36 +3,32 @@ package com.niallod.quickbudget;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.niallod.quickbudget.business.Item;
 import com.niallod.quickbudget.business.ItemMaker;
 import com.niallod.quickbudget.database.DatabaseManager;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
+import java.util.Locale;
 
-public class AddItem extends AppCompatActivity implements View.OnClickListener {
+public class ItemModifyActivity extends AppCompatActivity implements View.OnClickListener{
 
     private EditText nameInput;
     private EditText valueInput;
-    private TextView typeLabel;
     private Spinner itemType;
     private Spinner monthInput;
     private Spinner yearInput;
+    //    private EditText monthInput;
+//    private EditText yearInput;
     private RadioButton incomeInput;
     private RadioButton expInput;
     private RadioButton repeatInput;
@@ -41,12 +37,13 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
     private ImageButton clearButton;
     private ImageButton submitButton;
 
-    private String typeOfItem = "";
-    private int month = 0;
-    private int year = 0;
-    private boolean isIncome = true;
-    private boolean isExpense = false;
-    private boolean isRepeat = false;
+    private boolean isIncome;
+    private boolean isExpense;
+    private boolean isRepeat;
+
+    private int month;
+    private int year;
+    private String typeOfItem;
 
     private ArrayAdapter<String> incomeTypeAdapter;
     private ArrayAdapter<String> expTypeAdapter;
@@ -58,33 +55,37 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
     private String[] months;
     private String[] years;
 
+    private Bundle bundle;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_item);
+        setContentView(R.layout.activity_item_modify);
 
-        nameInput = (EditText) findViewById(R.id.add_item_name_input);
-        valueInput = (EditText) findViewById(R.id.add_item_value_input);
-        itemType = (Spinner) findViewById(R.id.add_item_type_input_spinner);
-        monthInput = (Spinner) findViewById(R.id.add_item_month_input_spinner);
-        yearInput = (Spinner) findViewById(R.id.add_item_year_input_spinner);
-        incomeInput = (RadioButton) findViewById(R.id.add_item_income);
-        expInput = (RadioButton) findViewById(R.id.add_item_exp);
-        repeatInput = (RadioButton) findViewById(R.id.add_item_repeat);
-        userInputtedLocation = (EditText) findViewById(R.id.add_item_manual_location_input);
-        clearButton = (ImageButton) findViewById(R.id.add_item_cancel);
-        submitButton = (ImageButton) findViewById(R.id.add_item_submit);
-        typeLabel = (TextView) findViewById(R.id.add_item_type_label);
+        bundle = getIntent().getExtras();
 
-        typeLabel.setText(getResources().getString(R.string.type_label));
+        isIncome = bundle.getBoolean("item_income");
+        isExpense = bundle.getBoolean("item_exp");
+        isRepeat = bundle.getBoolean("item_repeat");
 
-        incomeInput.setChecked(isIncome);
-        expInput.setChecked(isExpense);
-        repeatInput.setChecked(isRepeat);
+        nameInput = (EditText) findViewById(R.id.modify_item_name_input);
+        valueInput = (EditText) findViewById(R.id.modify_item_value_input);
+        itemType = (Spinner) findViewById(R.id.modify_item_type_input_spinner);
+        monthInput = (Spinner) findViewById(R.id.modify_item_month_input_spinner);
+        yearInput = (Spinner) findViewById(R.id.modify_item_year_input_spinner);
+        incomeInput = (RadioButton) findViewById(R.id.modify_item_income);
+        expInput = (RadioButton) findViewById(R.id.modify_item_exp);
+        repeatInput = (RadioButton) findViewById(R.id.modify_item_repeat);
+        userInputtedLocation = (EditText) findViewById(R.id.modify_item_manual_location_input);
+        clearButton = (ImageButton) findViewById(R.id.modify_item_cancel);
+        submitButton = (ImageButton) findViewById(R.id.modify_item_submit);
 
         incomeInput.setOnClickListener(this);
         expInput.setOnClickListener(this);
         repeatInput.setOnClickListener(this);
+        submitButton.setOnClickListener(this);
+        clearButton.setOnClickListener(this);
 
         incomeTypes = getResources().getStringArray(R.array.income_types);
         incomeTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, incomeTypes);
@@ -99,12 +100,20 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
         yearsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, years);
         yearsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        submitButton.setOnClickListener(this);
-        clearButton.setOnClickListener(this);
-
         init();
         monthInput.setAdapter(monthsAdapter);
         yearInput.setAdapter(yearsAdapter);
+
+        nameInput.setText(bundle.getString("item_name"));
+        itemType.setSelection(bundle.getInt("item_type") - 1);
+        valueInput.setText(String.format(Locale.UK, "%6.2f", bundle.getFloat("item_value")));
+        monthInput.setSelection(bundle.getInt("item_month"));
+        yearInput.setSelection(convertYearToIndex(years, bundle.getInt("item_year")));
+        incomeInput.setChecked(isIncome);
+        expInput.setChecked(isExpense);
+        repeatInput.setChecked(isRepeat);
+        userInputtedLocation.setText(bundle.getString("item_location"));
+
     }
 
     @Override
@@ -112,10 +121,10 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
 
         switch (view.getId()) {
 
-            case R.id.add_item_income: {
+            case R.id.modify_item_income: {
                 isIncome = !isIncome;
                 incomeInput.setChecked(isIncome);
-                if(isIncome) {
+                if (isIncome) {
                     expInput.setChecked(false);
                     isExpense = false;
                 } else {
@@ -125,10 +134,10 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
                 init();
             } break;
 
-            case R.id.add_item_exp: {
+            case R.id.modify_item_exp: {
                 isExpense = !isExpense;
                 expInput.setChecked(isExpense);
-                if(isExpense) {
+                if (isExpense) {
                     incomeInput.setChecked(false);
                     isIncome = false;
                 } else {
@@ -138,28 +147,40 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
                 init();
             } break;
 
-            case R.id.add_item_repeat: {
+            case R.id.modify_item_repeat: {
                 isRepeat = !isRepeat;
                 repeatInput.setChecked(isRepeat);
             } break;
 
-            case R.id.add_item_cancel: {
-                clearAllInputs();
+            case R.id.modify_item_cancel: {
+                finish();
             } break;
 
-            case R.id.add_item_submit: {
-                if(updateDatabaseWithNewItem()) {
+            case R.id.modify_item_submit: {
+                if(modifyDatabaseWIthEdit()) {
                     Toast.makeText(this, "New Item Successfully added", Toast.LENGTH_SHORT).show();
-                    clearAllInputs();
+                    finish();
                 } else {
                     Toast.makeText(this, "Item not added", Toast.LENGTH_SHORT).show();
                 }
             } break;
         }
 
+
     }
 
-    private boolean updateDatabaseWithNewItem() {
+    private boolean inputValid() {
+
+        if(nameInput.getText().toString().equals("") ||
+                valueInput.getText().toString().equals("")  ||
+                (isIncome && isExpense) || year == 0 ||
+                month == 0 || typeOfItem.equals(""))
+            return false;
+
+        return true;
+    }
+
+    private boolean modifyDatabaseWIthEdit() {
         String monthStr = (String) monthInput.getSelectedItem();
         switch (monthStr) {
             case "January": { month = 1; } break;
@@ -192,44 +213,31 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
             } else {
                 types = expTypes;
             }
-            Item theItem = itemMaker.makeItem(name, value, typeOfItem, month, year,
-                    isIncome, isExpense, isRepeat, location, types);
+            Item theItem = itemMaker.makeItem(bundle.getInt("item_id"), name, value, typeOfItem, month, year,
+                    isIncome, isExpense, isRepeat, location,types);
 
             DatabaseManager databaseManager = new DatabaseManager(this);
             databaseManager.openDatabase();
-            boolean result = databaseManager.addNewItem(theItem);
+            boolean result = databaseManager.updateExistingItem(theItem);
             databaseManager.closeDatabase();
 
             return result;
         }
-
         return false;
     }
 
-    private void clearAllInputs() {
-        nameInput.setText("");
-        valueInput.setText("");
-        userInputtedLocation.setText("");
-        incomeInput.setChecked(true);
-        expInput.setChecked(false);
-        repeatInput.setChecked(false);
-        isIncome = true;
-        isExpense = false;
-        isRepeat = false;
-    }
-
-    private boolean inputValid() {
-
-        if(nameInput.getText().toString().equals("") ||
-                valueInput.getText().toString().equals("")  ||
-                (isIncome && isExpense) || year == 0 ||
-                month == 0 || typeOfItem.equals(""))
-            return false;
-
-        return true;
+    private int convertYearToIndex(String[] years, int year) {
+        Integer theYear = year;
+        for(int i = 0; i < years.length; i++) {
+            if(years[i].equals(theYear.toString())) {
+                return i - 1;
+            }
+        }
+        return -1;
     }
 
     private void init() {
+
         if(isIncome) {
             itemType.setAdapter(incomeTypeAdapter);
         } else {
@@ -239,7 +247,7 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.add_menu, menu);
+        getMenuInflater().inflate(R.menu.modify_item_menu, menu);
         return true;
     }
 
@@ -247,8 +255,8 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemID = item.getItemId();
         switch (itemID) {
-            case R.id.action_remove_item: {
-                Intent i = new Intent(this, RemoveItem.class);
+            case R.id.action_add_item: {
+                Intent i = new Intent(this, AddItem.class);
                 startActivity(i);
             } break;
 
@@ -256,8 +264,8 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
                 finish();
             } break;
 
-            case R.id.action_edit_item: {
-                Intent i = new Intent(this, EditItem.class);
+            case R.id.action_remove_item: {
+                Intent i = new Intent(this, RemoveItem.class);
                 startActivity(i);
             } break;
 
@@ -277,5 +285,4 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
         }
         return true;
     }
-
 }

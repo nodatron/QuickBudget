@@ -100,24 +100,13 @@ public class MainActivity extends AppCompatActivity {
         expExpandableListView = (ExpandableListView) findViewById(R.id.main_screen_exp_list_view_exp);
         balanceLabel = (TextView) findViewById(R.id.balance_label_main_menu);
         balanceValue = (TextView) findViewById(R.id.balance_total_main_menu);
-//        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
-//        setSupportActionBar(toolbar);
+
 
 
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
-        int month = calendar.get(Calendar.MONTH);
+        // Adding one to month cause it give the previous month if i don't
+        int month = calendar.get(Calendar.MONTH) + 1;
         int year = calendar.get(Calendar.YEAR);
-
-//        DatabaseManager dbm = new DatabaseManager(this);
-//        dbm.openDatabase();
-//        dbm.addNewItem(new Item("work", 1, 300.00f, false, true, false, month, year, "Kncoklyon"));
-//        dbm.addNewItem(new Item("birthday", 1, 240.00f, false, true, false, month, year, "Kncoklyon"));
-//        dbm.addNewItem(new Item("bonus", 1, 450.00f, false, true, false, month, year, "Kncoklyon"));
-//
-//        dbm.addNewItem(new Item("bonus", 1, 450.00f, false, false, true, month, year, "Kncoklyon"));
-//        dbm.addNewItem(new Item("bonus", 1, 450.00f, false, false, true, month, year, "Kncoklyon"));
-//        dbm.addNewItem(new Item("bonus", 1, 450.00f, false, false, true, month, year, "Kncoklyon"));
-//        dbm.closeDatabase();
 
         List<Item> incomeItems;
         List<Item> expItems;
@@ -147,6 +136,9 @@ public class MainActivity extends AppCompatActivity {
 
         incomeExpandableListView.setAdapter(incomeExpandableListAdapter);
         expExpandableListView.setAdapter(expandableListAdapter);
+
+        incomeExpandableListView.expandGroup(0);
+        expExpandableListView.expandGroup(0);
 
         incomeExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override

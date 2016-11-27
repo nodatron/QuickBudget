@@ -29,72 +29,9 @@
         android:hint="Value"
         android:ems="10"
         android:id="@+id/add_item_value_input"
-        android:layout_below="@+id/add_item_name_input"/>
-
-
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/add_item_value_input"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/add_item_type_input_spinner" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:id="@+id/inner_layout_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/add_item_type_input_spinner"
-        android:layout_alignParentStart="true">
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:id="@+id/add_item_month_input_spinner" />
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/add_item_year_input_spinner"
-            android:layout_weight="0.5" />
-    </LinearLayout>
-
-    <!--<LinearLayout-->
-        <!--android:orientation="horizontal"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/inner_layout_2"-->
-        <!--android:layout_below="@+id/inner_layout_1">-->
-
-        <!--<EditText-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:inputType="number"-->
-            <!--android:ems="10"-->
-            <!--android:id="@+id/editText3"-->
-            <!--android:layout_weight="0.5" />-->
-
-        <!--<EditText-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:inputType="number"-->
-            <!--android:ems="10"-->
-            <!--android:id="@+id/editText4"-->
-            <!--android:layout_weight="0.5" />-->
-
-    <!--</LinearLayout>-->
-
-    <RadioButton
-        android:text="Income Item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_item_income"
-        android:layout_below="@+id/inner_layout_1"
-        android:textSize="18sp"
+        android:layout_below="@+id/add_item_name_input"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:textAlignment="center" />
+        android:layout_alignParentStart="true" />
 
     <RadioButton
         android:text="Expenditure Item"
@@ -111,26 +48,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/add_item_repeat"
         android:layout_below="@+id/add_item_exp"
-        android:textSize="18sp"
-        android:textAlignment="center" />
-
-    <CheckBox
-        android:text="Manually add location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_item_manual_location"
-        android:layout_below="@+id/add_item_repeat"
-        android:textSize="18sp"
-        android:textAlignment="center" />
-
-    <RadioButton
-        android:text="Get Location from phone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/add_item_manual_location"
-        android:layout_alignParentStart="true"
-        android:id="@+id/add_item_auto_location"
-        android:visibility="gone"
         android:textSize="18sp"
         android:textAlignment="center" />
 
@@ -157,8 +74,59 @@
         android:hint="Location Name"
         android:ems="10"
         android:id="@+id/add_item_manual_location_input"
-        android:layout_below="@+id/add_item_auto_location"
+        android:layout_below="@+id/add_item_repeat"
         android:visibility="visible"
+        android:layout_alignParentStart="true" />
+
+    <RadioButton
+        android:text="Income Item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_item_income"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:layout_below="@+id/inner_layout_1"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="32dp"
+        android:layout_alignParentEnd="true" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/inner_layout_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/add_item_type_input_spinner"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="24dp">
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:id="@+id/add_item_month_input_spinner" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_item_year_input_spinner"
+            android:layout_weight="0.5" />
+    </LinearLayout>
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:id="@+id/add_item_type_label"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/add_item_value_input"
+        android:textSize="18sp" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_item_type_input_spinner"
+        android:layout_below="@+id/add_item_type_label"
         android:layout_alignParentStart="true" />
 
 

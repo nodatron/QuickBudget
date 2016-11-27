@@ -2,7 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.niallod.quickbudget.MainActivity">
+    tools:context="com.niallod.quickbudget.ItemModifyActivity">
+
+    <item
+        android:id="@+id/action_back_arrow"
+        android:title="@string/back"
+        android:icon="@mipmap/ic_keyboard_backspace_black_24dp"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_add_item"
@@ -17,10 +23,10 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/action_edit_item"
-        android:icon="@mipmap/ic_create_black_24dp"
-        android:title="@string/edit_item"
-        app:showAsAction="always" />
+        android:id="@+id/action_home_item"
+        android:icon="@mipmap/ic_home_black_24dp"
+        android:title="@string/home"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_settings"

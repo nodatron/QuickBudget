@@ -7,13 +7,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/parent_label"
-        android:layout_weight="0.45" />
+        android:layout_weight="0.45"
+        android:textSize="24sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/parent_value"
-        android:layout_weight="0.45" />
+        android:layout_weight="0.45"
+        android:textSize="24sp" />
 
     <!--<ImageButton-->
         <!--android:layout_width="wrap_content"-->

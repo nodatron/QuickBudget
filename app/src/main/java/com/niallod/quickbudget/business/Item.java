@@ -6,6 +6,7 @@ package com.niallod.quickbudget.business;
 
 public class Item {
 
+    private int id;
     private String name;
     private int type;
     private float value;
@@ -20,10 +21,11 @@ public class Item {
 
     }
 
-    public Item(String name, int type, float value,
+    public Item(int id, String name, int type, float value,
                 boolean isRepeatable, boolean isIncome,
                 boolean isExpenditure, int month,
                 int year, String location) {
+        this.id = id;
         this.name = name;
         this.type = type;
         this.value = value;
@@ -33,6 +35,14 @@ public class Item {
         this.month = month;
         this.year = year;
         this.location = location;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {

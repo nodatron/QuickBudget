@@ -27,6 +27,7 @@ public class DatabaseConstants {
     }
 
     public static class Keys {
+        public static final String BUDGET_ID = "itemid";
         public static final String BUDGET_ITEM_NAME = "name";
         public static final String BUDGET_ITEM_TYPE = "type";
         public static final String BUDGET_ITEM_INCOME = "income";

@@ -15,6 +15,14 @@
     <string name="parent_title_exp">Expenditure</string>
     <string name="parent_title_balance">Balance</string>
 
+    <!-- Titles for activities -->
+    <string name="add_label">Add New Item</string>
+    <string name="overview_label">Current Month</string>
+    <string name="edit_label">Edit Item</string>
+    <string name="delete_label">Delete Item</string>
+
+    <string name="type_label">Type</string>
+
     <!-- Item Types -->
     <string-array name="income_types">
         <item>Salary/Wage</item>
@@ -71,6 +79,7 @@
     <string name="edit_item">Edit Item</string>
     <string name="settings">Settings</string>
     <string name="remove_item">Remove Item</string>
+    <string name="home">Home</string>
     <string name="back">Go Back</string>
 
     <!--  Error Messages  -->

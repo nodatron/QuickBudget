@@ -5,31 +5,28 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".QuickBudget" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:label="@string/overview_label">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddItem" />
-        <activity android:name=".EditItem" />
-        <activity android:name=".RemoveItem"></activity>
+        <activity android:name=".AddItem"
+            android:label="@string/add_label"/>
+        <activity android:name=".EditItem"
+            android:label="@string/edit_label"/>
+        <activity android:name=".RemoveItem"
+            android:label="@string/delete_label"/>
+        <activity android:name=".ItemModifyActivity"
+            android:label="@string/edit_label"/>
     </application>
 
 </manifest>

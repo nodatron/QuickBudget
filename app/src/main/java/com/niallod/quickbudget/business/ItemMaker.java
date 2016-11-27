@@ -18,11 +18,31 @@ public class ItemMaker {
 
     public Item makeItem(String name, double value, String type,
                          int month, int year, boolean isIncome,
-                         boolean isExpense, boolean isRepeat, String location) {
+                         boolean isExpense, boolean isRepeat, String location,
+                         String[] types) {
         Item item = new Item();
         item.setName(name);
         item.setValue((float) value);
-        item.setType(findTypeIntValue(type));
+        item.setType(findTypeIntValue(type, types));
+        item.setMonth(month);
+        item.setYear(year);
+        item.setLocation(location);
+        item.setIncome(isIncome);
+        item.setExpenditure(isExpense);
+        item.setRepeatable(isRepeat);
+
+        return item;
+    }
+
+    public Item makeItem(int id, String name, double value, String type,
+                         int month, int year, boolean isIncome,
+                         boolean isExpense, boolean isRepeat, String location,
+                         String[] types) {
+        Item item = new Item();
+        item.setId(id);
+        item.setName(name);
+        item.setValue((float) value);
+        item.setType(findTypeIntValue(type, types));
         item.setMonth(month);
         item.setYear(year);
         item.setLocation(location);
@@ -39,6 +59,7 @@ public class ItemMaker {
         if (cursor.moveToFirst()) {
 
             do {
+                int id = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.Keys.BUDGET_ID));
                 String name = cursor.getString(cursor.getColumnIndex(DatabaseConstants.Keys.BUDGET_ITEM_NAME));
                 int type = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.Keys.BUDGET_ITEM_TYPE));
                 float value = cursor.getFloat(cursor.getColumnIndex(DatabaseConstants.Keys.BUDGET_ITEM_VALUE));
@@ -59,7 +80,7 @@ public class ItemMaker {
                 String location = cursor.getString(cursor.getColumnIndex(DatabaseConstants.Keys.BUDGET_ITEM_LOCATION));
 
                 items.add(new Item(
-                        name, type, value, isRepeatable, isIncome, isExpense, month, year, location
+                        id, name, type, value, isRepeatable, isIncome, isExpense, month, year, location
                 ));
             } while(cursor.moveToNext());
 
@@ -68,7 +89,12 @@ public class ItemMaker {
         return items;
     }
 
-    private int findTypeIntValue(String type) {
-        return 1;
+    private int findTypeIntValue(String type, String[] types) {
+        for(int i = 0; i < types.length; i++) {
+            if(type.equals(types[i])) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
