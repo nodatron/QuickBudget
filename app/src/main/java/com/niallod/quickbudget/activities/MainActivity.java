@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         balanceLabel.setTypeface(null, Typeface.BOLD);
         balanceLabel.setText(getResources().getString(R.string.parent_title_balance));
         double balance = calculateBalanceValue(incomeItems, expItems);
-        if(balance <= 0) {
+        if(balance < 0) {
             balanceLabel.setTextColor(getResources().getColor(R.color.red));
             balanceValue.setTextColor(getResources().getColor(R.color.red));
         } else {
