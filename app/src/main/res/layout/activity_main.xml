@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    tools:context="com.niallod.quickbudget.MainActivity">
+    tools:context="com.niallod.quickbudget.activities.MainActivity">
 
     <ExpandableListView
         android:id="@+id/main_screen_exp_list_view_income"

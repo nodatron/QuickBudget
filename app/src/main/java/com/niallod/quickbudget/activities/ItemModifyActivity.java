@@ -1,4 +1,4 @@
-package com.niallod.quickbudget;
+package com.niallod.quickbudget.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,13 +7,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.niallod.quickbudget.R;
+import com.niallod.quickbudget.SettingsActivity;
 import com.niallod.quickbudget.business.Item;
 import com.niallod.quickbudget.business.ItemMaker;
 import com.niallod.quickbudget.database.DatabaseManager;

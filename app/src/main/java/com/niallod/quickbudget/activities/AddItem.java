@@ -1,15 +1,12 @@
-package com.niallod.quickbudget;
+package com.niallod.quickbudget.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -17,13 +14,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.niallod.quickbudget.R;
+import com.niallod.quickbudget.SettingsActivity;
 import com.niallod.quickbudget.business.Item;
 import com.niallod.quickbudget.business.ItemMaker;
 import com.niallod.quickbudget.database.DatabaseManager;
-
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
 
 public class AddItem extends AppCompatActivity implements View.OnClickListener {
 

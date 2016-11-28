@@ -9,9 +9,9 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings">
-        </activity>
-        <activity android:name=".MainActivity"
+            android:label="@string/title_activity_settings"></activity>
+        <activity
+            android:name=".activities.MainActivity"
             android:label="@string/overview_label">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,14 +19,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddItem"
-            android:label="@string/add_label"/>
-        <activity android:name=".EditItem"
-            android:label="@string/edit_label"/>
-        <activity android:name=".RemoveItem"
-            android:label="@string/delete_label"/>
-        <activity android:name=".ItemModifyActivity"
-            android:label="@string/edit_label"/>
+        <activity
+            android:name=".activities.AddItem"
+            android:label="@string/add_label" />
+        <activity
+            android:name=".activities.EditItem"
+            android:label="@string/edit_label" />
+        <activity
+            android:name=".activities.RemoveItem"
+            android:label="@string/delete_label" />
+        <activity
+            android:name=".activities.ItemModifyActivity"
+            android:label="@string/edit_label" />
+
+        <receiver android:name=".widget.QuickBudgetAppWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/quick_budget_app_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

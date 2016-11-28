@@ -1,4 +1,4 @@
-package com.niallod.quickbudget;
+package com.niallod.quickbudget.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -11,8 +11,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
+import com.niallod.quickbudget.R;
+import com.niallod.quickbudget.SettingsActivity;
 import com.niallod.quickbudget.adapters.EditItemsListAdapter;
 import com.niallod.quickbudget.business.Item;
 import com.niallod.quickbudget.database.DatabaseManager;
@@ -21,8 +22,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
-
-public class RemoveItem extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener{
+// TODO Make changing the budget month and year
+// TODO change to new activity to edit
+// TODO Add appbar
+public class EditItem extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener{
 
     private Spinner monthInput;
     private Spinner yearInput;
@@ -118,43 +121,64 @@ public class RemoveItem extends AppCompatActivity implements View.OnClickListene
         for(Item i : expData) { expDataNames.add(i.getName()); }
 
         incomeList = (ListView) findViewById(R.id.income_edit_list);
-        incomeList.setAdapter(new EditItemsListAdapter(this, R.layout.edit_item_row, incomeData, incomeDataNames, false));
+        incomeList.setAdapter(new EditItemsListAdapter(this, R.layout.edit_item_row, incomeData, incomeDataNames, true));
         expList = (ListView) findViewById(R.id.exp_edit_list);
-        expList.setAdapter(new EditItemsListAdapter(this, R.layout.edit_item_row, expData, expDataNames, false));
+        expList.setAdapter(new EditItemsListAdapter(this, R.layout.edit_item_row, expData, expDataNames, true));
 
         incomeList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         expList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         incomeList.setOnItemClickListener(this);
         expList.setOnItemClickListener(this);
+
+        yearInput.setSelection(convertYearToIndex(years, year));
+        monthInput.setSelection(month - 1);
     }
 
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        boolean result = false;
         if(adapterView.getId() == R.id.income_edit_list) {
-            DatabaseManager databaseManager = new DatabaseManager(this);
-            databaseManager.openDatabase();
-            result = databaseManager.deleteItemByID(incomeData.get(i).getId());
-            databaseManager.closeDatabase();
+            Intent intent = new Intent(this, ItemModifyActivity.class);
+            intent.putExtra("item_id", incomeData.get(i).getId());
+            intent.putExtra("item_name", incomeData.get(i).getName());
+            intent.putExtra("item_value", incomeData.get(i).getValue());
+            intent.putExtra("item_type", incomeData.get(i).getType());
+            intent.putExtra("item_month", incomeData.get(i).getMonth() - 1);
+            intent.putExtra("item_year", incomeData.get(i).getYear());
+            intent.putExtra("item_income", incomeData.get(i).isIncome());
+            intent.putExtra("item_exp", incomeData.get(i).isExpenditure());
+            intent.putExtra("item_repeat", incomeData.get(i).isRepeatable());
+            intent.putExtra("item_location", incomeData.get(i).getLocation());
+            startActivity(intent);
         } else if(adapterView.getId() == R.id.exp_edit_list) {
-            DatabaseManager databaseManager = new DatabaseManager(this);
-            databaseManager.openDatabase();
-            result = databaseManager.deleteItemByID(expData.get(i).getId());
-            databaseManager.closeDatabase();
+            Intent intent = new Intent(this, ItemModifyActivity.class);
+            intent.putExtra("item_id", expData.get(i).getId());
+            intent.putExtra("item_name", expData.get(i).getName());
+            intent.putExtra("item_value", expData.get(i).getValue());
+            intent.putExtra("item_type", expData.get(i).getType());
+            intent.putExtra("item_month", expData.get(i).getMonth() - 1);
+            intent.putExtra("item_year", expData.get(i).getYear());
+            intent.putExtra("item_income", expData.get(i).isIncome());
+            intent.putExtra("item_exp", expData.get(i).isExpenditure());
+            intent.putExtra("item_repeat", expData.get(i).isRepeatable());
+            intent.putExtra("item_location", expData.get(i).getLocation());
+            startActivity(intent);
         }
+    }
 
-        if(result) {
-            Toast.makeText(this, "Successfully Deleted Item", Toast.LENGTH_SHORT).show();
-            init();
-        } else {
-            Toast.makeText(this, "Successfully Deleted Item", Toast.LENGTH_SHORT).show();
+    private int convertYearToIndex(String[] years, int year) {
+        Integer theYear = year;
+        for(int i = 0; i < years.length; i++) {
+            if(years[i].equals(theYear.toString())) {
+                return i - 1;
+            }
         }
+        return -1;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.remove_menu, menu);
+        getMenuInflater().inflate(R.menu.edit_menu, menu);
         return true;
     }
 
@@ -171,8 +195,8 @@ public class RemoveItem extends AppCompatActivity implements View.OnClickListene
                 finish();
             } break;
 
-            case R.id.action_edit_item: {
-                Intent i = new Intent(this, EditItem.class);
+            case R.id.action_remove_item: {
+                Intent i = new Intent(this, RemoveItem.class);
                 startActivity(i);
             } break;
 
@@ -193,4 +217,9 @@ public class RemoveItem extends AppCompatActivity implements View.OnClickListene
         return true;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        init();
+    }
 }

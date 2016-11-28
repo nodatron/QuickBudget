@@ -1,25 +1,23 @@
-package com.niallod.quickbudget;
+package com.niallod.quickbudget.activities;
 
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
+import com.niallod.quickbudget.R;
+import com.niallod.quickbudget.SettingsActivity;
 import com.niallod.quickbudget.adapters.MyExpandableListAdapter;
 import com.niallod.quickbudget.business.Item;
 import com.niallod.quickbudget.database.DatabaseManager;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
