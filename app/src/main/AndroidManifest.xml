@@ -8,9 +8,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
-        <activity
             android:name=".activities.MainActivity"
             android:label="@string/overview_label">
             <intent-filter>

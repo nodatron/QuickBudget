@@ -30,17 +30,31 @@
             android:layout_weight="0.5" />
 
         <Button
-            android:text="Go"
+            android:text="@string/search_button_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/remove_item_go"/>
     </LinearLayout>
 
+    <TextView
+        android:text="@string/income_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textAlignment="center" />
+
     <ListView
         android:id="@+id/income_remove_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.5"/>
+        android:layout_weight="0.55"/>
+
+    <TextView
+        android:text="@string/exp_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textAlignment="center" />
 
     <ListView
         android:id="@+id/exp_remove_list"

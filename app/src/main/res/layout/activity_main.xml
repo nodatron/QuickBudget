@@ -11,9 +11,35 @@
     android:orientation="vertical"
     tools:context="com.niallod.quickbudget.activities.MainActivity">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/inner_layout_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:id="@+id/main_month_input_spinner" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/main_year_input_spinner"
+            android:layout_weight="0.5" />
+
+        <Button
+            android:text="@string/search_button_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/main_search_button"/>
+    </LinearLayout>
+
     <ExpandableListView
         android:id="@+id/main_screen_exp_list_view_income"
         android:layout_width="match_parent"
+        android:layout_marginTop="25dp"
         android:layout_height="175dp"/>
 
     <ExpandableListView
@@ -31,14 +57,17 @@
             android:layout_height="wrap_content"
             android:id="@+id/balance_label_main_menu"
             android:layout_weight="0.5"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:textAlignment="center" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/balance_total_main_menu"
             android:layout_weight="0.5"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:textAlignment="center" />
     </LinearLayout>
+
 
 </LinearLayout>

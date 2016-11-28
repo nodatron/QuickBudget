@@ -8,19 +8,15 @@
         android:layout_height="wrap_content"
         android:id="@+id/parent_label"
         android:layout_weight="0.45"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:textAlignment="center" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/parent_value"
         android:layout_weight="0.45"
-        android:textSize="24sp" />
-
-    <!--<ImageButton-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/parent_expand_button"-->
-        <!--android:layout_weight="0.1" />-->
+        android:textSize="24sp"
+        android:textAlignment="center" />
 
 </LinearLayout>

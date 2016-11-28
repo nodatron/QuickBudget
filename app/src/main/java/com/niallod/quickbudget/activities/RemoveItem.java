@@ -14,10 +14,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.niallod.quickbudget.R;
-import com.niallod.quickbudget.SettingsActivity;
-import com.niallod.quickbudget.activities.AddItem;
-import com.niallod.quickbudget.activities.EditItem;
-import com.niallod.quickbudget.activities.MainActivity;
 import com.niallod.quickbudget.adapters.EditItemsListAdapter;
 import com.niallod.quickbudget.business.Item;
 import com.niallod.quickbudget.database.DatabaseManager;
@@ -183,11 +179,6 @@ public class RemoveItem extends AppCompatActivity implements View.OnClickListene
 
             case R.id.action_home_item: {
                 Intent i = new Intent(this, MainActivity.class);
-                startActivity(i);
-            } break;
-
-            case R.id.action_settings: {
-                Intent i = new Intent(this, SettingsActivity.class);
                 startActivity(i);
             } break;
 

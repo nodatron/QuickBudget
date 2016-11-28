@@ -14,7 +14,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.niallod.quickbudget.R;
-import com.niallod.quickbudget.SettingsActivity;
 import com.niallod.quickbudget.business.Item;
 import com.niallod.quickbudget.business.ItemMaker;
 import com.niallod.quickbudget.database.DatabaseManager;
@@ -272,11 +271,6 @@ public class ItemModifyActivity extends AppCompatActivity implements View.OnClic
 
             case R.id.action_home_item: {
                 Intent i = new Intent(this, MainActivity.class);
-                startActivity(i);
-            } break;
-
-            case R.id.action_settings: {
-                Intent i = new Intent(this, SettingsActivity.class);
                 startActivity(i);
             } break;
 

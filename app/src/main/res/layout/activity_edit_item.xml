@@ -30,7 +30,7 @@
             android:layout_weight="0.5" />
 
         <Button
-            android:text="Go"
+            android:text="@string/search_button_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/edit_item_go"/>

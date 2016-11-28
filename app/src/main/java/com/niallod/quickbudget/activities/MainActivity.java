@@ -12,7 +12,6 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.niallod.quickbudget.R;
-import com.niallod.quickbudget.SettingsActivity;
 import com.niallod.quickbudget.adapters.MyExpandableListAdapter;
 import com.niallod.quickbudget.business.Item;
 import com.niallod.quickbudget.database.DatabaseManager;
@@ -68,10 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.action_remove_item: {
                 i = new Intent(this, RemoveItem.class);
-            } break;
-
-            case R.id.action_settings: {
-                i = new Intent(this, SettingsActivity.class);
             } break;
 
             default: {

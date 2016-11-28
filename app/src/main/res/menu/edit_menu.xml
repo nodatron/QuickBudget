@@ -27,12 +27,4 @@
         android:icon="@mipmap/ic_home_black_24dp"
         android:title="@string/home"
         app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/action_settings"
-        android:icon="@mipmap/ic_settings_black_24dp"
-        android:orderInCategory="100"
-        android:title="@string/settings"
-        app:showAsAction="ifRoom" />
-
 </menu>
