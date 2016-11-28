@@ -6,10 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.niallod.quickbudget.constants.DatabaseConstants;
 
-/**
- * Created by nodat on 22/11/2016.
- */
-
+// Reference: The following code is from Susan McKeever Sheet
 class DatabaseCreator extends SQLiteOpenHelper {
 
     DatabaseCreator(Context context) {

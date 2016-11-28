@@ -14,7 +14,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.niallod.quickbudget.R;
-import com.niallod.quickbudget.adapters.EditItemsListAdapter;
+import com.niallod.quickbudget.adapters.MyArrayAdapter;
 import com.niallod.quickbudget.business.Item;
 import com.niallod.quickbudget.database.DatabaseManager;
 
@@ -23,12 +23,20 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
+/**
+ * Activity to remove an item from the database
+ * @author Niall O Donnell
+ */
 public class RemoveItem extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener{
 
+    //Views
     private Spinner monthInput;
     private Spinner yearInput;
     private Button searchButton;
+    private ListView incomeList;
+    private ListView expList;
 
+    //Adapter variables
     private String[] months;
     private String[] years;
     private ArrayAdapter<String> monthsAdapter;
@@ -39,22 +47,21 @@ public class RemoveItem extends AppCompatActivity implements View.OnClickListene
     private List<String> incomeDataNames = new ArrayList<>();
     private List<String> expDataNames = new ArrayList<>();
 
-    private ListView incomeList;
-    private ListView expList;
-
     private int month;
     private int year;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_remove_item);
+        setContentView(R.layout.activity_list_view);
 
-        monthInput = (Spinner) findViewById(R.id.remove_item_month_input_spinner);
-        yearInput = (Spinner) findViewById(R.id.remove_item_year_input_spinner);
-        searchButton = (Button) findViewById(R.id.remove_item_go);
+        monthInput = (Spinner) findViewById(R.id.item_month_input_spinner);
+        yearInput = (Spinner) findViewById(R.id.item_year_input_spinner);
+        searchButton = (Button) findViewById(R.id.item_go);
 
         searchButton.setOnClickListener(this);
+
+        //adapters for spinners
         months = getResources().getStringArray(R.array.months);
         years = getResources().getStringArray(R.array.years);
 
@@ -67,7 +74,7 @@ public class RemoveItem extends AppCompatActivity implements View.OnClickListene
         yearInput.setAdapter(yearsAdapter);
 
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
-        month = calendar.get(Calendar.MONTH) + 1;
+        month = calendar.get(Calendar.MONTH);
         year = calendar.get(Calendar.YEAR);
         init();
 
@@ -76,22 +83,23 @@ public class RemoveItem extends AppCompatActivity implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.edit_item_go) {
+        if(view.getId() == R.id.item_go) {
+            // gets the month selected
             String monthStr = (String) monthInput.getSelectedItem();
             switch (monthStr) {
-                case "January": { month = 1; } break;
-                case "February": { month = 2; } break;
-                case "March": { month = 3; } break;
-                case "April": { month = 4; } break;
-                case "May": { month = 5; } break;
-                case "June": { month = 6; } break;
-                case "July": { month = 7; } break;
-                case "August": { month = 8; } break;
-                case "September": { month = 9; } break;
-                case "October": { month = 10; } break;
-                case "November": { month = 11; } break;
-                case "December": { month = 12; } break;
-                default: { month = 0; } break;
+                case "January": { month = 0; } break;
+                case "February": { month = 1; } break;
+                case "March": { month = 2; } break;
+                case "April": { month = 3; } break;
+                case "May": { month = 4; } break;
+                case "June": { month = 5; } break;
+                case "July": { month = 6; } break;
+                case "August": { month = 7; } break;
+                case "September": { month = 8; } break;
+                case "October": { month = 9; } break;
+                case "November": { month = 10; } break;
+                case "December": { month = 11; } break;
+                default: { month = -1; } break;
             }
 
             year = Integer.parseInt((String) yearInput.getSelectedItem());
@@ -101,6 +109,9 @@ public class RemoveItem extends AppCompatActivity implements View.OnClickListene
         init();
     }
 
+    /**
+     * Dynamically change the listViews
+     */
     private void init() {
 
         incomeList = null;
@@ -118,30 +129,30 @@ public class RemoveItem extends AppCompatActivity implements View.OnClickListene
         for(Item i : incomeData) { incomeDataNames.add(i.getName()); }
         for(Item i : expData) { expDataNames.add(i.getName()); }
 
-        incomeList = (ListView) findViewById(R.id.income_remove_list);
-        incomeList.setAdapter(new EditItemsListAdapter(this, R.layout.edit_item_row, incomeData, incomeDataNames, false));
-        expList = (ListView) findViewById(R.id.exp_remove_list);
-        expList.setAdapter(new EditItemsListAdapter(this, R.layout.edit_item_row, expData, expDataNames, false));
+        incomeList = (ListView) findViewById(R.id.income_list);
+        incomeList.setAdapter(new MyArrayAdapter(this, R.layout.item_kist_view_row, incomeData, incomeDataNames, false));
+        expList = (ListView) findViewById(R.id.exp_list);
+        expList.setAdapter(new MyArrayAdapter(this, R.layout.item_kist_view_row, expData, expDataNames, false));
 
         incomeList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         expList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         incomeList.setOnItemClickListener(this);
         expList.setOnItemClickListener(this);
 
-        monthInput.setSelection(month - 1);
+        monthInput.setSelection(month);
         yearInput.setSelection(convertYearToIndex(years, year));
     }
 
-
+    // deletes the item selected
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         boolean result = false;
-        if(adapterView.getId() == R.id.income_edit_list) {
+        if(adapterView.getId() == R.id.income_list) {
             DatabaseManager databaseManager = new DatabaseManager(this);
             databaseManager.openDatabase();
             result = databaseManager.deleteItemByID(incomeData.get(i).getId());
             databaseManager.closeDatabase();
-        } else if(adapterView.getId() == R.id.exp_edit_list) {
+        } else if(adapterView.getId() == R.id.exp_list) {
             DatabaseManager databaseManager = new DatabaseManager(this);
             databaseManager.openDatabase();
             result = databaseManager.deleteItemByID(expData.get(i).getId());
@@ -156,6 +167,7 @@ public class RemoveItem extends AppCompatActivity implements View.OnClickListene
         }
     }
 
+    //appbar methods
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.remove_menu, menu);
@@ -192,6 +204,12 @@ public class RemoveItem extends AppCompatActivity implements View.OnClickListene
         return true;
     }
 
+    /**
+     * Turns the year given into the correct year figure
+     * @param years String array of all possible years
+     * @param year index of the year in the string array
+     * @return the numerical version of the year selected
+     */
     private int convertYearToIndex(String[] years, int year) {
         Integer theYear = year;
         for(int i = 0; i < years.length; i++) {

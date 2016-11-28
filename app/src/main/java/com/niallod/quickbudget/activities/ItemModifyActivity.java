@@ -20,18 +20,19 @@ import com.niallod.quickbudget.database.DatabaseManager;
 
 import java.util.Locale;
 
+/** Activity used to edit an item sent to the activity
+ * @author Niall O Donnell
+ */
 public class ItemModifyActivity extends AppCompatActivity implements View.OnClickListener{
 
+    //Views variables
     private EditText nameInput;
     private EditText valueInput;
     private Spinner itemType;
     private Spinner monthInput;
     private Spinner yearInput;
-    //    private EditText monthInput;
-//    private EditText yearInput;
     private RadioButton incomeInput;
     private RadioButton expInput;
-    private RadioButton repeatInput;
     private EditText userInputtedLocation;
 
     private ImageButton clearButton;
@@ -39,12 +40,12 @@ public class ItemModifyActivity extends AppCompatActivity implements View.OnClic
 
     private boolean isIncome;
     private boolean isExpense;
-    private boolean isRepeat;
 
     private int month;
     private int year;
     private String typeOfItem;
 
+    //Adapters variables
     private ArrayAdapter<String> incomeTypeAdapter;
     private ArrayAdapter<String> expTypeAdapter;
     private ArrayAdapter<String> monthsAdapter;
@@ -55,9 +56,10 @@ public class ItemModifyActivity extends AppCompatActivity implements View.OnClic
     private String[] months;
     private String[] years;
 
+    //used to get the extra data
     private Bundle bundle;
 
-
+    // populates the gui to correspond to the data sent to the activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +69,6 @@ public class ItemModifyActivity extends AppCompatActivity implements View.OnClic
 
         isIncome = bundle.getBoolean("item_income");
         isExpense = bundle.getBoolean("item_exp");
-        isRepeat = bundle.getBoolean("item_repeat");
 
         nameInput = (EditText) findViewById(R.id.modify_item_name_input);
         valueInput = (EditText) findViewById(R.id.modify_item_value_input);
@@ -76,17 +77,17 @@ public class ItemModifyActivity extends AppCompatActivity implements View.OnClic
         yearInput = (Spinner) findViewById(R.id.modify_item_year_input_spinner);
         incomeInput = (RadioButton) findViewById(R.id.modify_item_income);
         expInput = (RadioButton) findViewById(R.id.modify_item_exp);
-        repeatInput = (RadioButton) findViewById(R.id.modify_item_repeat);
         userInputtedLocation = (EditText) findViewById(R.id.modify_item_manual_location_input);
         clearButton = (ImageButton) findViewById(R.id.modify_item_cancel);
         submitButton = (ImageButton) findViewById(R.id.modify_item_submit);
 
+        // setting listeners
         incomeInput.setOnClickListener(this);
         expInput.setOnClickListener(this);
-        repeatInput.setOnClickListener(this);
         submitButton.setOnClickListener(this);
         clearButton.setOnClickListener(this);
 
+        // adapters
         incomeTypes = getResources().getStringArray(R.array.income_types);
         incomeTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, incomeTypes);
         incomeTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -111,7 +112,6 @@ public class ItemModifyActivity extends AppCompatActivity implements View.OnClic
         yearInput.setSelection(convertYearToIndex(years, bundle.getInt("item_year")));
         incomeInput.setChecked(isIncome);
         expInput.setChecked(isExpense);
-        repeatInput.setChecked(isRepeat);
         userInputtedLocation.setText(bundle.getString("item_location"));
 
     }
@@ -120,7 +120,7 @@ public class ItemModifyActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View view) {
 
         switch (view.getId()) {
-
+            // income clicked make sure expense is the opposite and update the type spinner
             case R.id.modify_item_income: {
                 isIncome = !isIncome;
                 incomeInput.setChecked(isIncome);
@@ -133,7 +133,7 @@ public class ItemModifyActivity extends AppCompatActivity implements View.OnClic
                 }
                 init();
             } break;
-
+            //same as above but expense is clicked
             case R.id.modify_item_exp: {
                 isExpense = !isExpense;
                 expInput.setChecked(isExpense);
@@ -147,21 +147,18 @@ public class ItemModifyActivity extends AppCompatActivity implements View.OnClic
                 init();
             } break;
 
-            case R.id.modify_item_repeat: {
-                isRepeat = !isRepeat;
-                repeatInput.setChecked(isRepeat);
-            } break;
-
+            // quit out of the activity
             case R.id.modify_item_cancel: {
                 finish();
             } break;
 
+            // update the item in database
             case R.id.modify_item_submit: {
                 if(modifyDatabaseWIthEdit()) {
-                    Toast.makeText(this, "New Item Successfully added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Updated Item", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
-                    Toast.makeText(this, "Item not added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Item not Updated, please check fields", Toast.LENGTH_SHORT).show();
                 }
             } break;
         }
@@ -169,33 +166,42 @@ public class ItemModifyActivity extends AppCompatActivity implements View.OnClic
 
     }
 
+    /**
+     * Check if required fields filled
+     * @return if the required fields are filled
+     */
     private boolean inputValid() {
 
         if(nameInput.getText().toString().equals("") ||
                 valueInput.getText().toString().equals("")  ||
                 (isIncome && isExpense) || year == 0 ||
-                month == 0 || typeOfItem.equals(""))
+                month == -1 || typeOfItem.equals(""))
             return false;
 
         return true;
     }
 
+    /**
+     * Tries to update the item in the database
+     * @return if the update was successful
+     */
     private boolean modifyDatabaseWIthEdit() {
+        // gets the month selected
         String monthStr = (String) monthInput.getSelectedItem();
         switch (monthStr) {
-            case "January": { month = 1; } break;
-            case "February": { month = 2; } break;
-            case "March": { month = 3; } break;
-            case "April": { month = 4; } break;
-            case "May": { month = 5; } break;
-            case "June": { month = 6; } break;
-            case "July": { month = 7; } break;
-            case "August": { month = 8; } break;
-            case "September": { month = 9; } break;
-            case "October": { month = 10; } break;
-            case "November": { month = 11; } break;
-            case "December": { month = 12; } break;
-            default: { month = 0; } break;
+            case "January": { month = 0; } break;
+            case "February": { month = 1; } break;
+            case "March": { month = 2; } break;
+            case "April": { month = 3; } break;
+            case "May": { month = 4; } break;
+            case "June": { month = 5; } break;
+            case "July": { month = 6; } break;
+            case "August": { month = 7; } break;
+            case "September": { month = 8; } break;
+            case "October": { month = 9; } break;
+            case "November": { month = 10; } break;
+            case "December": { month = 11; } break;
+            default: { month = -1; } break;
         }
 
         year = Integer.parseInt((String) yearInput.getSelectedItem());
@@ -214,7 +220,7 @@ public class ItemModifyActivity extends AppCompatActivity implements View.OnClic
                 types = expTypes;
             }
             Item theItem = itemMaker.makeItem(bundle.getInt("item_id"), name, value, typeOfItem, month, year,
-                    isIncome, isExpense, isRepeat, location,types);
+                    isIncome, isExpense, location,types);
 
             DatabaseManager databaseManager = new DatabaseManager(this);
             databaseManager.openDatabase();
@@ -226,6 +232,12 @@ public class ItemModifyActivity extends AppCompatActivity implements View.OnClic
         return false;
     }
 
+    /**
+     * Turns the year given into the correct year figure
+     * @param years String array of all possible years
+     * @param year index of the year in the string array
+     * @return the numerical version of the year selected
+     */
     private int convertYearToIndex(String[] years, int year) {
         Integer theYear = year;
         for(int i = 0; i < years.length; i++) {
@@ -236,6 +248,9 @@ public class ItemModifyActivity extends AppCompatActivity implements View.OnClic
         return -1;
     }
 
+    /**
+     * swaps the type adapter dynamically
+     */
     private void init() {
 
         if(isIncome) {
@@ -245,6 +260,7 @@ public class ItemModifyActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
+    // appbar methods
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.modify_item_menu, menu);

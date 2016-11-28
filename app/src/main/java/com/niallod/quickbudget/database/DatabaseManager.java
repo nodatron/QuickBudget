@@ -15,11 +15,11 @@ import com.niallod.quickbudget.constants.DatabaseConstants;
 import java.util.List;
 
 /**
- * Created by nodat on 08/11/2016.
+ * Database class
  */
-
 public class DatabaseManager {
 
+    //Reference: The following code is from Susan McKeever
     private final Context context;
     private DatabaseCreator databaseCreator;
     private SQLiteDatabase database;
@@ -29,6 +29,7 @@ public class DatabaseManager {
         databaseCreator = new DatabaseCreator(this.context);
     }
 
+    // End Reference
 
     //                      Start of insert queries                             //
     public boolean addNewItem(Item item) {
@@ -57,12 +58,6 @@ public class DatabaseManager {
         } else {
             contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_INCOME, "true");
             contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_EXP, "false");
-        }
-
-        if(item.isRepeatable()) {
-            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_REPEAT, "true");
-        } else {
-            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_REPEAT, "false");
         }
 
         if(database.insert(DatabaseConstants.Tables.BUDGET_ITEMS, null, contentValues) == -1L) {
@@ -118,8 +113,7 @@ public class DatabaseManager {
                         DatabaseConstants.Keys.BUDGET_ITEM_MONTH,
                         DatabaseConstants.Keys.BUDGET_ITEM_YEAR,
                         DatabaseConstants.Keys.BUDGET_ITEM_INCOME,
-                        DatabaseConstants.Keys.BUDGET_ITEM_EXP,
-                        DatabaseConstants.Keys.BUDGET_ITEM_REPEAT
+                        DatabaseConstants.Keys.BUDGET_ITEM_EXP
                 },
                 DatabaseConstants.Keys.BUDGET_ITEM_MONTH + " = " + month + " and "
                 + DatabaseConstants.Keys.BUDGET_ITEM_YEAR + " = " + year + " and "
@@ -133,7 +127,6 @@ public class DatabaseManager {
 
 
     //                      Database Update Methods                             //
-    //TODO Make this better by only updating the required fields
     public boolean updateExistingItem(Item item) {
 
         if(!(doesItemExist(item.getId()))) {
@@ -153,12 +146,6 @@ public class DatabaseManager {
         } else {
             contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_INCOME, "true");
             contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_EXP, "false");
-        }
-
-        if(item.isRepeatable()) {
-            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_REPEAT, "true");
-        } else {
-            contentValues.put(DatabaseConstants.Keys.BUDGET_ITEM_REPEAT, "false");
         }
 
         if(database.update(DatabaseConstants.Tables.BUDGET_ITEMS,
@@ -185,6 +172,7 @@ public class DatabaseManager {
     }
     //                      End of Delete Methods                               //
 
+    // Reference: The following code is from Susan McKeever
     //                      Database Control Methods                            //
     public DatabaseManager openDatabase()
             throws SQLException {
@@ -196,5 +184,5 @@ public class DatabaseManager {
         database.close();
     }
     //                      End of Control Methods                              //
-
+    // End Reference
 }

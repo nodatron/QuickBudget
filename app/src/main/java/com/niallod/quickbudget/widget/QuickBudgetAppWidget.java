@@ -14,10 +14,11 @@ import com.niallod.quickbudget.R;
 import com.niallod.quickbudget.activities.RemoveItem;
 
 /**
- * Implementation of App Widget functionality.
+ * Widget that is 4 x 1 long
  */
 public class QuickBudgetAppWidget extends AppWidgetProvider {
 
+    //actions
     public static String ADD = "ADD";
     public static String DELETE = "DELETE";
     public static String EDIT = "EDIT";
@@ -29,6 +30,7 @@ public class QuickBudgetAppWidget extends AppWidgetProvider {
 
         for (int appWidgetId : appWidgetIds) {
 
+                //creating the actions for the widget
                 Intent addIntent = new Intent(context, QuickBudgetAppWidget.class);
                 addIntent.setAction(ADD);
                 Intent removeIntent = new Intent(context, QuickBudgetAppWidget.class);
@@ -64,6 +66,7 @@ public class QuickBudgetAppWidget extends AppWidgetProvider {
         // Enter relevant functionality for when the last widget is disabled
     }
 
+    // respond to a click
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);

@@ -19,14 +19,17 @@ import java.util.Locale;
  * Created by nodat on 26/11/2016.
  */
 
-public class EditItemsListAdapter extends ArrayAdapter<String> {
+/**
+ * Custom Array Adapter to be used in the listviews
+ */
+public class MyArrayAdapter extends ArrayAdapter<String> {
 
     private final Context context;
     private int rowLayout;
     private List<Item> data;
     private boolean isEditItem;
 
-    public EditItemsListAdapter(Context context, int rowLayout, List<Item> data, List<String> dataNames, boolean isEditItem) {
+    public MyArrayAdapter(Context context, int rowLayout, List<Item> data, List<String> dataNames, boolean isEditItem) {
         super(context, rowLayout, dataNames);
         this.context = context;
         this.rowLayout = rowLayout;

@@ -22,8 +22,12 @@ import com.niallod.quickbudget.database.DatabaseManager;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+/** This is am activity class that holds all the functionality for adding a new item to the database
+ * @author Niall O Donnell
+ */
 public class AddItem extends AppCompatActivity implements View.OnClickListener {
 
+    // all the widget variables
     private EditText nameInput;
     private EditText valueInput;
     private TextView typeLabel;
@@ -32,19 +36,19 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
     private Spinner yearInput;
     private RadioButton incomeInput;
     private RadioButton expInput;
-    private RadioButton repeatInput;
     private EditText userInputtedLocation;
 
     private ImageButton clearButton;
     private ImageButton submitButton;
 
+    // variables used in the insert
     private String typeOfItem = "";
     private int month = 0;
     private int year = 0;
     private boolean isIncome = true;
     private boolean isExpense = false;
-    private boolean isRepeat = false;
 
+    // adapters and string needed
     private ArrayAdapter<String> incomeTypeAdapter;
     private ArrayAdapter<String> expTypeAdapter;
     private ArrayAdapter<String> monthsAdapter;
@@ -60,6 +64,7 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
 
+        // getting all the views from the layout
         nameInput = (EditText) findViewById(R.id.add_item_name_input);
         valueInput = (EditText) findViewById(R.id.add_item_value_input);
         itemType = (Spinner) findViewById(R.id.add_item_type_input_spinner);
@@ -67,7 +72,6 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
         yearInput = (Spinner) findViewById(R.id.add_item_year_input_spinner);
         incomeInput = (RadioButton) findViewById(R.id.add_item_income);
         expInput = (RadioButton) findViewById(R.id.add_item_exp);
-        repeatInput = (RadioButton) findViewById(R.id.add_item_repeat);
         userInputtedLocation = (EditText) findViewById(R.id.add_item_manual_location_input);
         clearButton = (ImageButton) findViewById(R.id.add_item_cancel);
         submitButton = (ImageButton) findViewById(R.id.add_item_submit);
@@ -75,14 +79,17 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
 
         typeLabel.setText(getResources().getString(R.string.type_label));
 
+        //auto setting radio buttons
         incomeInput.setChecked(isIncome);
         expInput.setChecked(isExpense);
-        repeatInput.setChecked(isRepeat);
 
+        // setting listeners
         incomeInput.setOnClickListener(this);
         expInput.setOnClickListener(this);
-        repeatInput.setOnClickListener(this);
+        submitButton.setOnClickListener(this);
+        clearButton.setOnClickListener(this);
 
+        // populating the adapters
         incomeTypes = getResources().getStringArray(R.array.income_types);
         incomeTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, incomeTypes);
         incomeTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -95,19 +102,18 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
         years = getResources().getStringArray(R.array.years);
         yearsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, years);
         yearsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        submitButton.setOnClickListener(this);
-        clearButton.setOnClickListener(this);
-
+        // method used to change a spinner dynamically
         init();
+        //set month and year adapters
         monthInput.setAdapter(monthsAdapter);
         yearInput.setAdapter(yearsAdapter);
 
+        // set the month and year spinner to the current month
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
-        month = calendar.get(Calendar.MONTH) + 1;
+        month = calendar.get(Calendar.MONTH);
         year = calendar.get(Calendar.YEAR);
 
-        monthInput.setSelection(month - 1);
+        monthInput.setSelection(month);
         yearInput.setSelection(convertYearToIndex(years, year));
     }
 
@@ -116,6 +122,7 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
 
         switch (view.getId()) {
 
+            // Income clicked so make sure expense is the opposite and change the spinner for types
             case R.id.add_item_income: {
                 isIncome = !isIncome;
                 incomeInput.setChecked(isIncome);
@@ -128,7 +135,7 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
                 }
                 init();
             } break;
-
+            // Same as above but expense is clicked
             case R.id.add_item_exp: {
                 isExpense = !isExpense;
                 expInput.setChecked(isExpense);
@@ -142,17 +149,14 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
                 init();
             } break;
 
-            case R.id.add_item_repeat: {
-                isRepeat = !isRepeat;
-                repeatInput.setChecked(isRepeat);
-            } break;
-
+            // cancel button clicked
             case R.id.add_item_cancel: {
                 clearAllInputs();
             } break;
 
+            //submit button clicked
             case R.id.add_item_submit: {
-                if(updateDatabaseWithNewItem()) {
+                if(insertNewItemIntoDatabase()) {
                     Toast.makeText(this, "New Item Successfully added", Toast.LENGTH_SHORT).show();
                     clearAllInputs();
                 } else {
@@ -163,30 +167,37 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
 
     }
 
-    private boolean updateDatabaseWithNewItem() {
+    /**
+     * Attempts to add the new item to the database
+     * @return if the insert was successfull
+     */
+    private boolean insertNewItemIntoDatabase() {
+        // gets the month selected
         String monthStr = (String) monthInput.getSelectedItem();
         switch (monthStr) {
-            case "January": { month = 1; } break;
-            case "February": { month = 2; } break;
-            case "March": { month = 3; } break;
-            case "April": { month = 4; } break;
-            case "May": { month = 5; } break;
-            case "June": { month = 6; } break;
-            case "July": { month = 7; } break;
-            case "August": { month = 8; } break;
-            case "September": { month = 9; } break;
-            case "October": { month = 10; } break;
-            case "November": { month = 11; } break;
-            case "December": { month = 12; } break;
-            default: { month = 0; } break;
+            case "January": { month = 0; } break;
+            case "February": { month = 1; } break;
+            case "March": { month = 2; } break;
+            case "April": { month = 3; } break;
+            case "May": { month = 4; } break;
+            case "June": { month = 5; } break;
+            case "July": { month = 6; } break;
+            case "August": { month = 7; } break;
+            case "September": { month = 8; } break;
+            case "October": { month = 9; } break;
+            case "November": { month = 10; } break;
+            case "December": { month = 11; } break;
+            default: { month = -1; } break;
         }
 
         year = Integer.parseInt((String) yearInput.getSelectedItem());
         typeOfItem = (String) itemType.getSelectedItem();
 
+        // checks if all required fields are selected
         if(inputValid()) {
             ItemMaker itemMaker = new ItemMaker();
 
+            // gets all data and queries the database
             String name = nameInput.getText().toString();
             double value = Double.parseDouble(valueInput.getText().toString());
             String location = userInputtedLocation.getText().toString();
@@ -197,7 +208,7 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
                 types = expTypes;
             }
             Item theItem = itemMaker.makeItem(name, value, typeOfItem, month, year,
-                    isIncome, isExpense, isRepeat, location, types);
+                    isIncome, isExpense, location, types);
 
             DatabaseManager databaseManager = new DatabaseManager(this);
             databaseManager.openDatabase();
@@ -210,29 +221,37 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
         return false;
     }
 
+    /**
+     * Clears all inputs and sets the views back to default
+     */
     private void clearAllInputs() {
         nameInput.setText("");
         valueInput.setText("");
         userInputtedLocation.setText("");
         incomeInput.setChecked(true);
         expInput.setChecked(false);
-        repeatInput.setChecked(false);
         isIncome = true;
         isExpense = false;
-        isRepeat = false;
     }
 
+    /**
+     *  Checks is all required fields have been filled
+     * @return if all required fields are filled
+     */
     private boolean inputValid() {
 
         if(nameInput.getText().toString().equals("") ||
                 valueInput.getText().toString().equals("")  ||
                 (isIncome && isExpense) || year == 0 ||
-                month == 0 || typeOfItem.equals(""))
+                month == -1 || typeOfItem.equals(""))
             return false;
 
         return true;
     }
 
+    /**
+     * Switches the type adapter based on whether income or expense is clicked
+     */
     private void init() {
         if(isIncome) {
             itemType.setAdapter(incomeTypeAdapter);
@@ -241,6 +260,23 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
+    /**
+     * Turns the year given into the correct year figure
+     * @param years String array of all possible years
+     * @param year index of the year in the string array
+     * @return the numerical version of the year selected
+     */
+    private int convertYearToIndex(String[] years, int year) {
+        Integer theYear = year;
+        for(int i = 0; i < years.length; i++) {
+            if(years[i].equals(theYear.toString())) {
+                return i - 1;
+            }
+        }
+        return -1;
+    }
+
+    // Next two methods are for the appbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.add_menu, menu);
@@ -277,14 +313,6 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
         return true;
     }
 
-    private int convertYearToIndex(String[] years, int year) {
-        Integer theYear = year;
-        for(int i = 0; i < years.length; i++) {
-            if(years[i].equals(theYear.toString())) {
-                return i - 1;
-            }
-        }
-        return -1;
-    }
+
 
 }

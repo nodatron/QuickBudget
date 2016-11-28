@@ -11,12 +11,11 @@ import com.niallod.quickbudget.R;
 import com.niallod.quickbudget.activities.AddItem;
 
 /**
- * Created by nodat on 28/11/2016.
+ * Add Widget for the app that brings the use to the add item activity
  */
-
 public class QuickBudgetAddWidget extends AppWidgetProvider {
 
-
+    // action name
     public static String ADD = "ADD";
 
     @Override
@@ -25,6 +24,7 @@ public class QuickBudgetAddWidget extends AppWidgetProvider {
 
         for (int appWidgetId : appWidgetIds) {
 
+            //creating an action for the widget as it cant use onclick listeners
             Intent addIntent = new Intent(context, QuickBudgetAppWidget.class);
             addIntent.setAction(ADD);
             PendingIntent addPendingIntent = PendingIntent.getBroadcast(context, 0, addIntent, 0);
@@ -36,6 +36,7 @@ public class QuickBudgetAddWidget extends AppWidgetProvider {
         }
     }
 
+    //whent he widget is clicked method is called
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);

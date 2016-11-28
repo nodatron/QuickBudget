@@ -25,8 +25,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+/** Activity that displays month data to the user
+ * @author Niall O Donnell
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    // Views
     private ExpandableListView incomeExpandableListView;
     private ExpandableListView expExpandableListView;
     private TextView balanceLabel;
@@ -34,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Spinner monthInput;
     private Spinner yearInput;
     private Button searchButton;
+    //adapter vars
     private String[] months;
     private String[] years;
     private ArrayAdapter<String> monthsAdapter;
@@ -47,8 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
-        // Adding one to month cause it give the previous month if i don't
-        month = calendar.get(Calendar.MONTH) + 1;
+        month = calendar.get(Calendar.MONTH);
         year = calendar.get(Calendar.YEAR);
 
         monthInput = (Spinner) findViewById(R.id.main_month_input_spinner);
@@ -66,18 +70,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         monthInput.setAdapter(monthsAdapter);
         yearInput.setAdapter(yearsAdapter);
-
+        //dynamically set ecpandable list view
         init();
 
     }
 
+    //refresh views
     @Override
     public void onResume() {
         super.onResume();
         init();
     }
 
-
+    //appbar methods
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.overview_menu, menu);
@@ -109,6 +114,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
+    /**
+     * calculates the balance
+     * @param incomeItems income items
+     * @param expItems expense items
+     * @return balance
+     */
     private double calculateBalanceValue(List<Item> incomeItems, List<Item> expItems) {
         double balance = 0.0;
         for(Item i : incomeItems) {
@@ -120,8 +131,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return balance;
     }
 
+    /**
+     * dynamically sets the expandable list view
+     */
     private void init() {
-
 
 
         incomeExpandableListView = (ExpandableListView) findViewById(R.id.main_screen_exp_list_view_income);
@@ -132,12 +145,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         List<Item> incomeItems;
         List<Item> expItems;
 
+        //get data from databse
         DatabaseManager databaseManager = new DatabaseManager(this);
         databaseManager.openDatabase();
         incomeItems = databaseManager.getAllItemsForMonth(month, year, true);
         expItems = databaseManager.getAllItemsForMonth(month, year, false);
         databaseManager.closeDatabase();
 
+        //set views
         String parentTitle = getResources().getString(R.string.parent_title_income);
         String expParentTitle = getResources().getString(R.string.parent_title_exp);
         balanceLabel.setTypeface(null, Typeface.BOLD);
@@ -152,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         balanceValue.setText(String.format(Locale.UK, "%6.2f", calculateBalanceValue(incomeItems, expItems)));
 
-
+        //expandablelistview adapters stuff
         HashMap<String, List<Item>> incomeChildItems = new HashMap<>();
         incomeChildItems.put(parentTitle, incomeItems);
         final MyExpandableListAdapter incomeExpandableListAdapter =
@@ -170,8 +185,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         expExpandableListView.expandGroup(0);
 
         yearInput.setSelection(convertYearToIndex(years, year));
-        monthInput.setSelection(month - 1);
+        monthInput.setSelection(month);
 
+        // listener for expandable list view
         incomeExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView expandableListView, View view, int i, long l) {
@@ -202,21 +218,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.main_search_button) {
+            // gets the month selected
             String monthStr = (String) monthInput.getSelectedItem();
             switch (monthStr) {
-                case "January": { month = 1; } break;
-                case "February": { month = 2; } break;
-                case "March": { month = 3; } break;
-                case "April": { month = 4; } break;
-                case "May": { month = 5; } break;
-                case "June": { month = 6; } break;
-                case "July": { month = 7; } break;
-                case "August": { month = 8; } break;
-                case "September": { month = 9; } break;
-                case "October": { month = 10; } break;
-                case "November": { month = 11; } break;
-                case "December": { month = 12; } break;
-                default: { month = 0; } break;
+                case "January": { month = 0; } break;
+                case "February": { month = 1; } break;
+                case "March": { month = 2; } break;
+                case "April": { month = 3; } break;
+                case "May": { month = 4; } break;
+                case "June": { month = 5; } break;
+                case "July": { month = 6; } break;
+                case "August": { month = 7; } break;
+                case "September": { month = 8; } break;
+                case "October": { month = 9; } break;
+                case "November": { month = 10; } break;
+                case "December": { month = 11; } break;
+                default: { month = -1; } break;
             }
 
             year = Integer.parseInt((String) yearInput.getSelectedItem());
@@ -226,6 +243,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         init();
     }
 
+    /**
+     * Turns the year given into the correct year figure
+     * @param years String array of all possible years
+     * @param year index of the year in the string array
+     * @return the numerical version of the year selected
+     */
     private int convertYearToIndex(String[] years, int year) {
         Integer theYear = year;
         for(int i = 0; i < years.length; i++) {

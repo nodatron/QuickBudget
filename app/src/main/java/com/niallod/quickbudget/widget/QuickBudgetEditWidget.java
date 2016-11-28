@@ -12,16 +12,18 @@ import com.niallod.quickbudget.activities.EditItem;
 import com.niallod.quickbudget.activities.RemoveItem;
 
 /**
- * Implementation of App Widget functionality.
+ * edit widget functionality
  */
 public class QuickBudgetEditWidget extends AppWidgetProvider {
 
+    //name of action
     public static String EDIT = "EDIT";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
+            //setting up the action
             Intent editIntent = new Intent(context, QuickBudgetEditWidget.class);
             editIntent.setAction(EDIT);
             PendingIntent editPendingAction = PendingIntent.getBroadcast(context, 0, editIntent, 0);
@@ -43,6 +45,7 @@ public class QuickBudgetEditWidget extends AppWidgetProvider {
         // Enter relevant functionality for when the last widget is disabled
     }
 
+    //widget is clicked so respond
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);

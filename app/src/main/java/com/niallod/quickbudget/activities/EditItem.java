@@ -13,7 +13,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.niallod.quickbudget.R;
-import com.niallod.quickbudget.adapters.EditItemsListAdapter;
+import com.niallod.quickbudget.adapters.MyArrayAdapter;
 import com.niallod.quickbudget.business.Item;
 import com.niallod.quickbudget.database.DatabaseManager;
 
@@ -21,15 +21,20 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
-// TODO Make changing the budget month and year
-// TODO change to new activity to edit
-// TODO Add appbar
+
+/** Activity class for choosing which item you wish to edit
+ * @author Niall O Donnell
+ */
 public class EditItem extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener{
 
+    // View variables
     private Spinner monthInput;
     private Spinner yearInput;
     private Button searchButton;
+    private ListView incomeList;
+    private ListView expList;
 
+    // Variable for adapters
     private String[] months;
     private String[] years;
     private ArrayAdapter<String> monthsAdapter;
@@ -40,22 +45,22 @@ public class EditItem extends AppCompatActivity implements View.OnClickListener,
     private List<String> incomeDataNames = new ArrayList<>();
     private List<String> expDataNames = new ArrayList<>();
 
-    private ListView incomeList;
-    private ListView expList;
-
     private int month;
     private int year;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_remove_item);
+        setContentView(R.layout.activity_list_view);
 
-        monthInput = (Spinner) findViewById(R.id.remove_item_month_input_spinner);
-        yearInput = (Spinner) findViewById(R.id.remove_item_year_input_spinner);
-        searchButton = (Button) findViewById(R.id.remove_item_go);
+        // getting views by id
+        monthInput = (Spinner) findViewById(R.id.item_month_input_spinner);
+        yearInput = (Spinner) findViewById(R.id.item_year_input_spinner);
+        searchButton = (Button) findViewById(R.id.item_go);
 
         searchButton.setOnClickListener(this);
+
+        // inflating rows using adapters
         months = getResources().getStringArray(R.array.months);
         years = getResources().getStringArray(R.array.years);
 
@@ -64,12 +69,15 @@ public class EditItem extends AppCompatActivity implements View.OnClickListener,
         yearsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, years);
         yearsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+        //setting adapters
         monthInput.setAdapter(monthsAdapter);
         yearInput.setAdapter(yearsAdapter);
 
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
         month = calendar.get(Calendar.MONTH);
         year = calendar.get(Calendar.YEAR);
+
+        // Used to update listviews dynamically
         init();
 
     }
@@ -77,33 +85,32 @@ public class EditItem extends AppCompatActivity implements View.OnClickListener,
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.edit_item_go) {
-            String monthStr = (String) monthInput.getSelectedItem();
-            switch (monthStr) {
-                case "January": { month = 1; } break;
-                case "February": { month = 2; } break;
-                case "March": { month = 3; } break;
-                case "April": { month = 4; } break;
-                case "May": { month = 5; } break;
-                case "June": { month = 6; } break;
-                case "July": { month = 7; } break;
-                case "August": { month = 8; } break;
-                case "September": { month = 9; } break;
-                case "October": { month = 10; } break;
-                case "November": { month = 11; } break;
-                case "December": { month = 12; } break;
-                default: { month = 0; } break;
-            }
-
-            year = Integer.parseInt((String) yearInput.getSelectedItem());
-
+        // gets the month selected
+        String monthStr = (String) monthInput.getSelectedItem();
+        switch (monthStr) {
+            case "January": { month = 0; } break;
+            case "February": { month = 1; } break;
+            case "March": { month = 2; } break;
+            case "April": { month = 3; } break;
+            case "May": { month = 4; } break;
+            case "June": { month = 5; } break;
+            case "July": { month = 6; } break;
+            case "August": { month = 7; } break;
+            case "September": { month = 8; } break;
+            case "October": { month = 9; } break;
+            case "November": { month = 10; } break;
+            case "December": { month = 11; } break;
+            default: { month = -1; } break;
         }
+
+        year = Integer.parseInt((String) yearInput.getSelectedItem());
 
         init();
     }
 
     private void init() {
 
+        //used to populate listviews
         incomeList = null;
         expList = null;
 
@@ -119,10 +126,10 @@ public class EditItem extends AppCompatActivity implements View.OnClickListener,
         for(Item i : incomeData) { incomeDataNames.add(i.getName()); }
         for(Item i : expData) { expDataNames.add(i.getName()); }
 
-        incomeList = (ListView) findViewById(R.id.income_remove_list);
-        incomeList.setAdapter(new EditItemsListAdapter(this, R.layout.edit_item_row, incomeData, incomeDataNames, true));
-        expList = (ListView) findViewById(R.id.exp_remove_list);
-        expList.setAdapter(new EditItemsListAdapter(this, R.layout.edit_item_row, expData, expDataNames, true));
+        incomeList = (ListView) findViewById(R.id.income_list);
+        incomeList.setAdapter(new MyArrayAdapter(this, R.layout.item_kist_view_row, incomeData, incomeDataNames, true));
+        expList = (ListView) findViewById(R.id.exp_list);
+        expList.setAdapter(new MyArrayAdapter(this, R.layout.item_kist_view_row, expData, expDataNames, true));
 
         incomeList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         expList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -130,13 +137,14 @@ public class EditItem extends AppCompatActivity implements View.OnClickListener,
         expList.setOnItemClickListener(this);
 
         yearInput.setSelection(convertYearToIndex(years, year));
-        monthInput.setSelection(month - 1);
+        monthInput.setSelection(month);
     }
 
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        if(adapterView.getId() == R.id.income_edit_list) {
+        // sends all the data for an item to a new activity
+        if(adapterView.getId() == R.id.income_list) {
             Intent intent = new Intent(this, ItemModifyActivity.class);
             intent.putExtra("item_id", incomeData.get(i).getId());
             intent.putExtra("item_name", incomeData.get(i).getName());
@@ -146,10 +154,9 @@ public class EditItem extends AppCompatActivity implements View.OnClickListener,
             intent.putExtra("item_year", incomeData.get(i).getYear());
             intent.putExtra("item_income", incomeData.get(i).isIncome());
             intent.putExtra("item_exp", incomeData.get(i).isExpenditure());
-            intent.putExtra("item_repeat", incomeData.get(i).isRepeatable());
             intent.putExtra("item_location", incomeData.get(i).getLocation());
             startActivity(intent);
-        } else if(adapterView.getId() == R.id.exp_edit_list) {
+        } else if(adapterView.getId() == R.id.exp_list) {
             Intent intent = new Intent(this, ItemModifyActivity.class);
             intent.putExtra("item_id", expData.get(i).getId());
             intent.putExtra("item_name", expData.get(i).getName());
@@ -159,12 +166,17 @@ public class EditItem extends AppCompatActivity implements View.OnClickListener,
             intent.putExtra("item_year", expData.get(i).getYear());
             intent.putExtra("item_income", expData.get(i).isIncome());
             intent.putExtra("item_exp", expData.get(i).isExpenditure());
-            intent.putExtra("item_repeat", expData.get(i).isRepeatable());
             intent.putExtra("item_location", expData.get(i).getLocation());
             startActivity(intent);
         }
     }
 
+    /**
+     * Turns the year given into the correct year figure
+     * @param years String array of all possible years
+     * @param year index of the year in the string array
+     * @return the numerical version of the year selected
+     */
     private int convertYearToIndex(String[] years, int year) {
         Integer theYear = year;
         for(int i = 0; i < years.length; i++) {
@@ -175,6 +187,7 @@ public class EditItem extends AppCompatActivity implements View.OnClickListener,
         return -1;
     }
 
+    // Appbar methods
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.edit_menu, menu);
@@ -211,6 +224,7 @@ public class EditItem extends AppCompatActivity implements View.OnClickListener,
         return true;
     }
 
+    // Refresh listviews
     @Override
     public void onResume() {
         super.onResume();

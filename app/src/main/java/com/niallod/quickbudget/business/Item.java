@@ -1,7 +1,7 @@
 package com.niallod.quickbudget.business;
 
-/**
- * Created by nodat on 22/11/2016.
+/** An Item of a budget
+ * @author Niall O Donnell
  */
 
 public class Item {
@@ -10,7 +10,6 @@ public class Item {
     private String name;
     private int type;
     private float value;
-    private boolean isRepeatable;
     private boolean isIncome;
     private boolean isExpenditure;
     private int month;
@@ -22,14 +21,12 @@ public class Item {
     }
 
     public Item(int id, String name, int type, float value,
-                boolean isRepeatable, boolean isIncome,
-                boolean isExpenditure, int month,
+                boolean isIncome, boolean isExpenditure, int month,
                 int year, String location) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.value = value;
-        this.isRepeatable = isRepeatable;
         this.isIncome = isIncome;
         this.isExpenditure = isExpenditure;
         this.month = month;
@@ -67,14 +64,6 @@ public class Item {
 
     public void setValue(float value) {
         this.value = value;
-    }
-
-    public boolean isRepeatable() {
-        return isRepeatable;
-    }
-
-    public void setRepeatable(boolean repeatable) {
-        isRepeatable = repeatable;
     }
 
     public boolean isIncome() {

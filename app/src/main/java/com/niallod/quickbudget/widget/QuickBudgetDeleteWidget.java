@@ -12,16 +12,18 @@ import com.niallod.quickbudget.activities.AddItem;
 import com.niallod.quickbudget.activities.RemoveItem;
 
 /**
- * Implementation of App Widget functionality.
+ * Delete Widget
  */
 public class QuickBudgetDeleteWidget extends AppWidgetProvider {
 
+    //action name
     public static String DELETE = "DELETE";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
+            //setting up the action on the widget
             Intent delIntent = new Intent(context, QuickBudgetAppWidget.class);
             delIntent.setAction(DELETE);
             PendingIntent delPendingAction = PendingIntent.getBroadcast(context, 0, delIntent, 0);
@@ -43,6 +45,7 @@ public class QuickBudgetDeleteWidget extends AppWidgetProvider {
         // Enter relevant functionality for when the last widget is disabled
     }
 
+    //widget is clicked so respond
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);

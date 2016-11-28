@@ -7,18 +7,18 @@ import com.niallod.quickbudget.constants.DatabaseConstants;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by nodat on 24/11/2016.
+/** Used to make Items or an Items
+ * @author Niall O Donnell
  */
-
 public class ItemMaker {
 
     public ItemMaker() {
     }
 
+    // makes an item
     public Item makeItem(String name, double value, String type,
                          int month, int year, boolean isIncome,
-                         boolean isExpense, boolean isRepeat, String location,
+                         boolean isExpense, String location,
                          String[] types) {
         Item item = new Item();
         item.setName(name);
@@ -29,14 +29,14 @@ public class ItemMaker {
         item.setLocation(location);
         item.setIncome(isIncome);
         item.setExpenditure(isExpense);
-        item.setRepeatable(isRepeat);
 
         return item;
     }
 
+    // makes an item
     public Item makeItem(int id, String name, double value, String type,
                          int month, int year, boolean isIncome,
-                         boolean isExpense, boolean isRepeat, String location,
+                         boolean isExpense, String location,
                          String[] types) {
         Item item = new Item();
         item.setId(id);
@@ -48,11 +48,11 @@ public class ItemMaker {
         item.setLocation(location);
         item.setIncome(isIncome);
         item.setExpenditure(isExpense);
-        item.setRepeatable(isRepeat);
 
         return item;
     }
 
+    //turns a cursor into a list of items
     public List<Item> convertCursorToList(Cursor cursor) {
         List<Item> items = new ArrayList<>();
 
@@ -71,16 +71,12 @@ public class ItemMaker {
                 if(cursor.getString(cursor.getColumnIndex(DatabaseConstants.Keys.BUDGET_ITEM_INCOME)).equals("true")) {
                     isIncome = true;
                 }
-                boolean isRepeatable = false;
-                if(cursor.getString(cursor.getColumnIndex(DatabaseConstants.Keys.BUDGET_ITEM_REPEAT)).equals("true")) {
-                    isRepeatable = true;
-                }
                 int month = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.Keys.BUDGET_ITEM_MONTH));
                 int year = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.Keys.BUDGET_ITEM_YEAR));
                 String location = cursor.getString(cursor.getColumnIndex(DatabaseConstants.Keys.BUDGET_ITEM_LOCATION));
 
                 items.add(new Item(
-                        id, name, type, value, isRepeatable, isIncome, isExpense, month, year, location
+                        id, name, type, value, isIncome, isExpense, month, year, location
                 ));
             } while(cursor.moveToNext());
 
@@ -89,6 +85,7 @@ public class ItemMaker {
         return items;
     }
 
+    // gets the int value of a type
     private int findTypeIntValue(String type, String[] types) {
         for(int i = 0; i < types.length; i++) {
             if(type.equals(types[i])) {

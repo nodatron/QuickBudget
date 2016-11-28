@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by nodat on 21/11/2016.
+ * Custom Expandable list view adapter
+ * @author Niall O Donnell
  */
-
 public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 
     private String parentTitle;
@@ -74,6 +74,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
+    //populates the parent
     @Override
     public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
         String title = (String) this.getGroup(i);
@@ -100,6 +101,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         return view;
     }
 
+    //populates the children
     @Override
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
         Item item = (Item) getChild(i, i1);
@@ -127,6 +129,10 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         return view;
     }
 
+    /**
+     * Calculates the totals of the lists
+     * @return total of item values
+     */
     private double calculateTotalOfValues() {
         double value = 0.0;
         List<Item> items = childItems.get(parentTitle);
