@@ -19,6 +19,9 @@ import com.niallod.quickbudget.business.Item;
 import com.niallod.quickbudget.business.ItemMaker;
 import com.niallod.quickbudget.database.DatabaseManager;
 
+import java.util.Calendar;
+import java.util.TimeZone;
+
 public class AddItem extends AppCompatActivity implements View.OnClickListener {
 
     private EditText nameInput;
@@ -99,6 +102,13 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
         init();
         monthInput.setAdapter(monthsAdapter);
         yearInput.setAdapter(yearsAdapter);
+
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        month = calendar.get(Calendar.MONTH) + 1;
+        year = calendar.get(Calendar.YEAR);
+
+        monthInput.setSelection(month - 1);
+        yearInput.setSelection(convertYearToIndex(years, year));
     }
 
     @Override
@@ -265,6 +275,16 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
             } break;
         }
         return true;
+    }
+
+    private int convertYearToIndex(String[] years, int year) {
+        Integer theYear = year;
+        for(int i = 0; i < years.length; i++) {
+            if(years[i].equals(theYear.toString())) {
+                return i - 1;
+            }
+        }
+        return -1;
     }
 
 }

@@ -26,30 +26,32 @@ public class QuickBudgetAppWidget extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
+
         for (int appWidgetId : appWidgetIds) {
 
-            Intent addIntent = new Intent(context, QuickBudgetAppWidget.class);
-            addIntent.setAction(ADD);
-            Intent removeIntent = new Intent(context, QuickBudgetAppWidget.class);
-            removeIntent.setAction(DELETE);
-            Intent homeIntent = new Intent(context, QuickBudgetAppWidget.class);
-            homeIntent.setAction(HOME);
-            Intent editIntent = new Intent(context, QuickBudgetAppWidget.class);
-            editIntent.setAction(EDIT);
+                Intent addIntent = new Intent(context, QuickBudgetAppWidget.class);
+                addIntent.setAction(ADD);
+                Intent removeIntent = new Intent(context, QuickBudgetAppWidget.class);
+                removeIntent.setAction(DELETE);
+                Intent homeIntent = new Intent(context, QuickBudgetAppWidget.class);
+                homeIntent.setAction(HOME);
+                Intent editIntent = new Intent(context, QuickBudgetAppWidget.class);
+                editIntent.setAction(EDIT);
 
-            PendingIntent addPendingIntent = PendingIntent.getBroadcast(context, 0, addIntent, 0);
-            PendingIntent removePendingIntent = PendingIntent.getBroadcast(context, 0, removeIntent, 0);
-            PendingIntent homePendingIntent = PendingIntent.getBroadcast(context, 0, homeIntent, 0);
-            PendingIntent editPendingIntent = PendingIntent.getBroadcast(context, 0, editIntent, 0);
+                PendingIntent addPendingIntent = PendingIntent.getBroadcast(context, 0, addIntent, 0);
+                PendingIntent removePendingIntent = PendingIntent.getBroadcast(context, 0, removeIntent, 0);
+                PendingIntent homePendingIntent = PendingIntent.getBroadcast(context, 0, homeIntent, 0);
+                PendingIntent editPendingIntent = PendingIntent.getBroadcast(context, 0, editIntent, 0);
 
-            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.quick_budget_app_widget);
-            views.setOnClickPendingIntent(R.id.widget_add, addPendingIntent);
-            views.setOnClickPendingIntent(R.id.widget_remove, removePendingIntent);
-            views.setOnClickPendingIntent(R.id.widget_home, homePendingIntent);
-            views.setOnClickPendingIntent(R.id.widget_edit, editPendingIntent);
+                RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.quick_budget_app_widget);
+                views.setOnClickPendingIntent(R.id.widget_add, addPendingIntent);
+                views.setOnClickPendingIntent(R.id.widget_remove, removePendingIntent);
+                views.setOnClickPendingIntent(R.id.widget_home, homePendingIntent);
+                views.setOnClickPendingIntent(R.id.widget_edit, editPendingIntent);
 
-            appWidgetManager.updateAppWidget(appWidgetId, views);
+                appWidgetManager.updateAppWidget(appWidgetId, views);
 //            updateAppWidget(context, appWidgetManager, appWidgetId);
+
         }
     }
 

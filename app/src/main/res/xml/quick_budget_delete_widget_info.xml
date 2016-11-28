@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:initialKeyguardLayout="@layout/quick_budget_app_widget"
-    android:initialLayout="@layout/quick_budget_app_widget"
-    android:minHeight="40dp"
-    android:minWidth="250dp"
+    android:initialKeyguardLayout="@layout/quick_budget_delete_widget"
+    android:initialLayout="@layout/quick_budget_delete_widget"
+    android:minHeight="50dp"
+    android:minWidth="50dp"
     android:previewImage="@drawable/example_appwidget_preview"
     android:updatePeriodMillis="86400000"
     android:widgetCategory="home_screen"/>

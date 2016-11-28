@@ -49,11 +49,11 @@ public class EditItem extends AppCompatActivity implements View.OnClickListener,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_item);
+        setContentView(R.layout.activity_remove_item);
 
-        monthInput = (Spinner) findViewById(R.id.edit_item_month_input_spinner);
-        yearInput = (Spinner) findViewById(R.id.edit_item_year_input_spinner);
-        searchButton = (Button) findViewById(R.id.edit_item_go);
+        monthInput = (Spinner) findViewById(R.id.remove_item_month_input_spinner);
+        yearInput = (Spinner) findViewById(R.id.remove_item_year_input_spinner);
+        searchButton = (Button) findViewById(R.id.remove_item_go);
 
         searchButton.setOnClickListener(this);
         months = getResources().getStringArray(R.array.months);
@@ -119,9 +119,9 @@ public class EditItem extends AppCompatActivity implements View.OnClickListener,
         for(Item i : incomeData) { incomeDataNames.add(i.getName()); }
         for(Item i : expData) { expDataNames.add(i.getName()); }
 
-        incomeList = (ListView) findViewById(R.id.income_edit_list);
+        incomeList = (ListView) findViewById(R.id.income_remove_list);
         incomeList.setAdapter(new EditItemsListAdapter(this, R.layout.edit_item_row, incomeData, incomeDataNames, true));
-        expList = (ListView) findViewById(R.id.exp_edit_list);
+        expList = (ListView) findViewById(R.id.exp_remove_list);
         expList.setAdapter(new EditItemsListAdapter(this, R.layout.edit_item_row, expData, expDataNames, true));
 
         incomeList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);

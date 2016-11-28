@@ -68,7 +68,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+        android:inputType="textCapWords|textAutoCorrect|textAutoComplete|textPersonName"
         android:hint="@string/item_location_label"
         android:ems="10"
         android:id="@+id/modify_item_manual_location_input"

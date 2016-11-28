@@ -1,51 +1,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#09C"
-    android:padding="@dimen/widget_margin">
+    android:background="@color/background">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5">
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/widget_home"
+        android:src="@mipmap/ic_home_black_24dp"
+        android:layout_weight="0.5"
+        android:scaleType="fitCenter"
+        android:backgroundTint="@android:drawable/screen_background_light_transparent"/>
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/widget_home"
-            android:src="@mipmap/ic_home_black_24dp"
-            android:layout_weight="0.5" />
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/widget_add"
+        android:src="@mipmap/ic_note_add_black_24dp"
+        android:layout_weight="0.5"
+        android:scaleType="fitCenter"
+        android:backgroundTint="@android:drawable/screen_background_light_transparent"/>
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/widget_add"
-            android:src="@mipmap/ic_add_black_24dp"
-            android:layout_weight="0.5" />
-    </LinearLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5">
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/widget_remove"
+        android:src="@mipmap/ic_delete_black_24dp"
+        android:layout_weight="0.5"
+        android:scaleType="fitCenter"
+        android:backgroundTint="@android:drawable/screen_background_light_transparent"/>
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/widget_remove"
-            android:src="@mipmap/ic_remove_black_24dp"
-            android:layout_weight="0.5" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/widget_edit"
-            android:src="@mipmap/ic_create_black_24dp"
-            android:layout_weight="0.5" />
-    </LinearLayout>
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/widget_edit"
+        android:src="@mipmap/ic_create_black_24dp"
+        android:layout_weight="0.5"
+        android:scaleType="fitCenter"
+        android:backgroundTint="@android:drawable/screen_background_light_transparent"/>
 
 
 </LinearLayout>

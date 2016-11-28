@@ -4,7 +4,11 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="background">#F222F2</color>
+    <color name="red">#FF0000</color>
+    <color name="black">#000</color>
+
     <color name="actionbar_main">#303F9F</color>
     <color name="actionbar_text">#FFFFFF</color>
+
+    <color name="background">#09C</color>
 </resources>

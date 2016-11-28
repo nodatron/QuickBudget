@@ -41,7 +41,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:background="@color/background"/>
 
     <ListView
         android:id="@+id/income_remove_list"
@@ -54,7 +55,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:background="@color/background"/>
 
     <ListView
         android:id="@+id/exp_remove_list"

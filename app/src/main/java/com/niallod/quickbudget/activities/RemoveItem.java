@@ -48,11 +48,11 @@ public class RemoveItem extends AppCompatActivity implements View.OnClickListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_item);
+        setContentView(R.layout.activity_remove_item);
 
-        monthInput = (Spinner) findViewById(R.id.edit_item_month_input_spinner);
-        yearInput = (Spinner) findViewById(R.id.edit_item_year_input_spinner);
-        searchButton = (Button) findViewById(R.id.edit_item_go);
+        monthInput = (Spinner) findViewById(R.id.remove_item_month_input_spinner);
+        yearInput = (Spinner) findViewById(R.id.remove_item_year_input_spinner);
+        searchButton = (Button) findViewById(R.id.remove_item_go);
 
         searchButton.setOnClickListener(this);
         months = getResources().getStringArray(R.array.months);
@@ -67,7 +67,7 @@ public class RemoveItem extends AppCompatActivity implements View.OnClickListene
         yearInput.setAdapter(yearsAdapter);
 
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
-        month = calendar.get(Calendar.MONTH);
+        month = calendar.get(Calendar.MONTH) + 1;
         year = calendar.get(Calendar.YEAR);
         init();
 
@@ -118,15 +118,18 @@ public class RemoveItem extends AppCompatActivity implements View.OnClickListene
         for(Item i : incomeData) { incomeDataNames.add(i.getName()); }
         for(Item i : expData) { expDataNames.add(i.getName()); }
 
-        incomeList = (ListView) findViewById(R.id.income_edit_list);
+        incomeList = (ListView) findViewById(R.id.income_remove_list);
         incomeList.setAdapter(new EditItemsListAdapter(this, R.layout.edit_item_row, incomeData, incomeDataNames, false));
-        expList = (ListView) findViewById(R.id.exp_edit_list);
+        expList = (ListView) findViewById(R.id.exp_remove_list);
         expList.setAdapter(new EditItemsListAdapter(this, R.layout.edit_item_row, expData, expDataNames, false));
 
         incomeList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         expList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         incomeList.setOnItemClickListener(this);
         expList.setOnItemClickListener(this);
+
+        monthInput.setSelection(month - 1);
+        yearInput.setSelection(convertYearToIndex(years, year));
     }
 
 
@@ -187,6 +190,16 @@ public class RemoveItem extends AppCompatActivity implements View.OnClickListene
             } break;
         }
         return true;
+    }
+
+    private int convertYearToIndex(String[] years, int year) {
+        Integer theYear = year;
+        for(int i = 0; i < years.length; i++) {
+            if(years[i].equals(theYear.toString())) {
+                return i - 1;
+            }
+        }
+        return -1;
     }
 
 }

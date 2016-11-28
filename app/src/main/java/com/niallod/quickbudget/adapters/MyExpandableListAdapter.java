@@ -114,16 +114,11 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 
             TextView child_label = (TextView) view.findViewById(R.id.item_name_child);
             TextView child_value = (TextView) view.findViewById(R.id.item_value_child);
-//        ImageButton child_button = (ImageButton) view.findViewById(R.id.item_edit_button);
 
             child_label.setText(title);
             String valueString = String.format(Locale.UK, "%6.2f", value);
             child_value.setText(valueString);
 
-//        ArrayList<Double> child_values = (ArrayList<Double>) values.get(child_parent_link.get(title));
-//        Double theValue = child_values.get(i1);
-//        String theValueString = theValue.toString();
-//        child_value.setText(theValueString);
 
             //TODO get the image and place it here
         }

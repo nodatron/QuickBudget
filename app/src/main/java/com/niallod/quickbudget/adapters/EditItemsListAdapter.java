@@ -51,7 +51,7 @@ public class EditItemsListAdapter extends ArrayAdapter<String> {
             if(isEditItem) {
                 editButton.setImageResource(R.mipmap.ic_create_black_24dp);
             } else {
-                editButton.setImageResource(R.mipmap.ic_delete_black_24dp);
+                editButton.setImageResource(R.mipmap.ic_delete_forever_black_24dp);
             }
             label.setText(data.get(position).getName());
             value.setText(String.format(Locale.UK, "%6.2f", data.get(position).getValue()));

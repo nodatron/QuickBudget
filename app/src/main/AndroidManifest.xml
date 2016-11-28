@@ -29,7 +29,9 @@
             android:name=".activities.ItemModifyActivity"
             android:label="@string/edit_label" />
 
-        <receiver android:name=".widget.QuickBudgetAppWidget">
+        <receiver
+            android:name=".widget.QuickBudgetAppWidget"
+            android:label="@string/full_widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -37,6 +39,38 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/quick_budget_app_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".widget.QuickBudgetAddWidget"
+            android:label="@string/add_widget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/quick_budget_add_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".widget.QuickBudgetDeleteWidget"
+            android:label="@string/delete_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/quick_budget_delete_widget_info" />
+        </receiver>
+        <receiver android:name=".widget.QuickBudgetEditWidget"
+            android:label="@string/edit_widget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/quick_budget_edit_widget_info" />
         </receiver>
     </application>
 
